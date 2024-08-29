@@ -3,6 +3,7 @@ import Link from "next/link";
 import { auth } from "~/auth";
 import { login } from "~/actions/login";
 import { redirect } from "next/navigation";
+import LoginSubmitButton from "~/ui/login/login-submit-button";
 
 export default async function Page() {
   const session = await auth();
@@ -46,9 +47,7 @@ export default async function Page() {
             <Link href="">ลืมรหัสผ่าน ?</Link>
           </div>
           <div className="flex w-full flex-col items-center justify-center py-2">
-            <button className="btn btn-secondary btn-sm min-w-[200px] rounded-full">
-              เข้าสู่ระบบ
-            </button>
+            <LoginSubmitButton />
           </div>
           <div className="flex w-full justify-center gap-2 py-2 text-xs text-slate-500">
             <span>ยังไม่มีบัญชี? </span>
