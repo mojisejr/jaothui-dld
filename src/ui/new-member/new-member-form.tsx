@@ -1,13 +1,21 @@
 "use client";
 import React, { useState } from "react";
-import { createNewMember } from "~/actions/new-member";
+import { createNewMemberInfo } from "~/actions/new-member";
+import { useFormStatus } from "react-dom";
+
 import {
   getProvinces,
   getAmphoeFromProvince,
   getDistrictsFromAmphoe,
 } from "~/lib/address-helper";
 
-const NewMemberForm = () => {
+interface NewMemberFormProps {
+  userId: string;
+}
+
+const NewMemberForm = ({ userId }: NewMemberFormProps) => {
+  const createNewMemberInfoWithUserId = createNewMemberInfo.bind(null, userId);
+
   const [province, setProvince] = useState<string>();
   const [amphoe, setAmphoe] = useState<string>();
 
@@ -15,7 +23,10 @@ const NewMemberForm = () => {
   const [farmAmphoe, setFarmAmphoe] = useState<string>();
 
   return (
-    <form action={createNewMember} className="grid grid-cols-1 gap-2">
+    <form
+      action={createNewMemberInfoWithUserId}
+      className="grid grid-cols-1 gap-2"
+    >
       <div className="grid grid-cols-2 gap-2">
         <div className="form-control">
           <input
@@ -781,10 +792,22 @@ const NewMemberForm = () => {
           </div>
         </div>
       </div>
-      <button type="submit" className="btn btn-primary rounded-full shadow-xl">
-        ยืนยันการลงทะเบียน
-      </button>
+      <SubmitNewUser />
     </form>
+  );
+};
+
+const SubmitNewUser = () => {
+  const { pending } = useFormStatus();
+  console.log(pending);
+  return (
+    <button
+      type="submit"
+      disabled={pending}
+      className="btn btn-secondary rounded-full shadow-xl"
+    >
+      {!pending ? <span>ยืนยันการลงทะเบียน</span> : <span>กำลังบันทึก...</span>}
+    </button>
   );
 };
 

@@ -1,7 +1,6 @@
 "use client";
 import Image from "next/image";
 import RegisterForm from "~/ui/register/register-form";
-import RegisterResult from "~/ui/register/register-result";
 
 export default function Page() {
   return (
@@ -15,7 +14,6 @@ export default function Page() {
             alt="dld-logo"
           />
         </figure>
-        {/* <RegisterResult /> */}
         <RegisterForm />
       </div>
     </main>

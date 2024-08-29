@@ -5,6 +5,19 @@
 await import("./src/env.js");
 
 /** @type {import("next").NextConfig} */
-const config = {};
+const config = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "**", // if your website has no www, drop it
+      },
+      {
+        protocol: "http",
+        hostname: "**",
+      },
+    ],
+  },
+};
 
 export default config;

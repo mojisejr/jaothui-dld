@@ -2,17 +2,123 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-    provider = "postgresql"
-    url      = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
-    id       Int    @id @default(autoincrement())
-    username String @unique
-    pwdHash  String
-    roleHash String
+  id              String           @id @default(cuid())
+  firstname       String
+  lastname        String
+  username        Int              @unique
+  pwdHash         String
+  roleHash        String //Protecting the route
+  RawRegisterData RawRegisterData?
+  AdminPosition   AdminPosition?
+}
+
+model RawRegisterData {
+  id                String           @id @default(cuid())
+  firstname         String
+  lastname          String
+  tel               String
+  idCard            BigInt           @unique
+  address1          String
+  province          String
+  amphoe            String
+  district          String
+  zipcode           String
+  farmName          String
+  farmLogo          String
+  farmAddress       String
+  farmProvince      String
+  farmAmphoe        String
+  farmDistrict      String
+  farmZipcode       String
+  farmSize1         Int
+  farmSize2         Int
+  farmSize3         Int
+  animalType        String
+  animalTypeOther   String?
+  momCount          Int
+  momBreed          String
+  dadCount          Int
+  dadBreed          String
+  otherAnimalSize   Int
+  children          Int
+  totalAnimalInFarm Int
+  farmObj1          String
+  farmObj2          String
+  farmObj3          String
+  farmObj4          String
+  farmObjOther      String?
+  grassField        String
+  water             String
+  waterOther        String?
+  food              String
+  foodOther         String?
+  treat             String
+  treatOther        String?
+  certificate       String
+  waterTreat        String
+  farmLocation      String
+  idCardImage       String
+  farmImage1        String
+  farmImage2        String
+  farmImage3        String
+  farmImage4        String
+  category          String
+  accept            String
+  user              User             @relation(fields: [userId], references: [id])
+  userId            String           @unique
+  appointment       DateTime?
+  MemberApprovement ApprovementInfo?
+}
+
+model ApprovementInfo {
+  id                 String          @id @default(cuid())
+  provinceApproved   String[]
+  centralApproved    String?
+  managementApproved String?
+  grassImage1        String
+  grassImage2        String
+  grassImage3        String
+  feedingBowl        String
+  feedingCount       Int
+  greenhouse         String
+  greenhouseCount    Int
+  waterBowl          String
+  waterBowlCount     Int
+  waterImage1        String
+  waterImage2        String
+  foodImage1         String
+  foodImage2         String
+  treatImage1        String
+  treatImage2        String
+  treatImage3        String
+  wasteTreatImage1   String
+  wasteTreatImage2   String
+  tag                String
+  certificate        String
+  product            String
+  health             String
+  foodManagement     String
+  market             String
+  result             String
+  note               String?
+  data               RawRegisterData @relation(fields: [rawRegisterDataId], references: [id])
+  rawRegisterDataId  String          @unique
+}
+
+model AdminPosition {
+  id       String @id @default(cuid())
+  userId   String @unique
+  user     User   @relation(fields: [userId], references: [id])
+  level    String
+  title    String
+  province String
 }
