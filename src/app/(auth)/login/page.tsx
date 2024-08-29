@@ -1,8 +1,16 @@
-"use client";
 import Image from "next/image";
 import Link from "next/link";
+import { auth } from "~/auth";
+import { login } from "~/actions/login";
+import { redirect } from "next/navigation";
 
-export default function Page() {
+export default async function Page() {
+  const session = await auth();
+
+  const user = session?.user;
+
+  if (user) redirect("/new-member");
+
   return (
     <main className="min-h-screen w-full overflow-y-auto">
       <div className="flex h-screen flex-col items-center gap-4 p-6">
@@ -18,16 +26,21 @@ export default function Page() {
           <h1 className="text-2xl font-semibold">ยินดีต้อนรับ</h1>
           <h3 className="font-thin">โปรดเข้าสู่ระบบ</h3>
         </div>
-        <form className="grid w-full grid-cols-1 gap-2">
+        <form action={login} className="grid w-full grid-cols-1 gap-2">
           <input
-            className="input input-bordered input-sm rounded-2xl"
-            type="text"
+            className="input input-sm input-bordered rounded-2xl"
+            name="username"
+            type="number"
+            maxLength={10}
             placeholder="หมายเลขโทรศัพท์"
+            required
           ></input>
           <input
-            className="input input-bordered input-sm rounded-2xl"
+            className="input input-sm input-bordered rounded-2xl"
+            name="password"
             type="password"
             placeholder="รหัสผ่าน"
+            required
           ></input>
           <div className="flex w-full justify-center py-2 text-xs text-slate-500">
             <Link href="">ลืมรหัสผ่าน ?</Link>
@@ -39,7 +52,7 @@ export default function Page() {
           </div>
           <div className="flex w-full justify-center gap-2 py-2 text-xs text-slate-500">
             <span>ยังไม่มีบัญชี? </span>
-            <Link href="#">สร้างบัญชี</Link>
+            <Link href="/register">สร้างบัญชี</Link>
           </div>
         </form>
       </div>

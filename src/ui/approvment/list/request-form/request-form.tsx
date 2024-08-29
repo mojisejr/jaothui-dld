@@ -1,30 +1,25 @@
-"use client";
-import React, { useState } from "react";
-import { createNewMemberInfo } from "~/actions/new-member";
-import { useFormStatus } from "react-dom";
+import Link from "next/link";
+import React from "react";
+import { confirmAppointmemt, getApprovementInfoOf } from "~/actions/approvment";
+import dayjs from "dayjs";
+import Image from "next/image";
+import SubmitAppointment from "./submit-appointment-btn";
 
-import {
-  getProvinces,
-  getAmphoeFromProvince,
-  getDistrictsFromAmphoe,
-} from "~/lib/address-helper";
-
-interface NewMemberFormProps {
-  userId: string;
+interface RequestFormProps {
+  requestId: string;
+  adminId: string;
+  level: string;
 }
 
-const NewMemberForm = ({ userId }: NewMemberFormProps) => {
-  const createNewMemberInfoWithUserId = createNewMemberInfo.bind(null, userId);
-
-  const [province, setProvince] = useState<string>();
-  const [amphoe, setAmphoe] = useState<string>();
-
-  const [farmProvince, setFarmProvince] = useState<string>();
-  const [farmAmphoe, setFarmAmphoe] = useState<string>();
-
+const RequestForm = async ({ requestId, adminId, level }: RequestFormProps) => {
+  const confirmAppointmentWithMetadata = confirmAppointmemt.bind(
+    null,
+    requestId,
+  );
+  const info = await getApprovementInfoOf(requestId);
   return (
     <form
-      action={createNewMemberInfoWithUserId}
+      action={confirmAppointmentWithMetadata}
       className="grid grid-cols-1 gap-2"
     >
       <div className="grid grid-cols-2 gap-2">
@@ -34,7 +29,8 @@ const NewMemberForm = ({ userId }: NewMemberFormProps) => {
             name="firstName"
             className="input input-sm input-bordered"
             placeholder="ชื่อ"
-            required
+            value={info?.firstname}
+            readOnly
           ></input>
         </div>
         <div className="form-control">
@@ -43,7 +39,8 @@ const NewMemberForm = ({ userId }: NewMemberFormProps) => {
             name="lastName"
             className="input input-sm input-bordered"
             placeholder="นามสกุล"
-            required
+            value={info?.lastname}
+            readOnly
           ></input>
         </div>
       </div>
@@ -53,7 +50,8 @@ const NewMemberForm = ({ userId }: NewMemberFormProps) => {
           name="tel"
           className="input input-sm input-bordered"
           placeholder="เบอร์โทรศัพท์"
-          required
+          readOnly
+          value={info?.tel}
         ></input>
       </div>
       <div className="form-control">
@@ -63,11 +61,10 @@ const NewMemberForm = ({ userId }: NewMemberFormProps) => {
         <input
           type="number"
           name="idCard"
-          minLength={13}
-          maxLength={13}
           className="input input-sm input-bordered"
           placeholder="เลขบัตรประชาชน (ไม่ต้องเติมขีด)"
-          required
+          value={info?.idCard.toString()}
+          readOnly
         ></input>
       </div>
       <div className="form-group">
@@ -81,61 +78,34 @@ const NewMemberForm = ({ userId }: NewMemberFormProps) => {
               name="address1"
               className="input input-sm input-bordered"
               placeholder="บ้านเลขที่"
-              required
+              value={info?.address1}
+              readOnly
             ></input>
           </div>
           <div className="form-control">
-            <select
-              defaultValue="0"
+            <input
               name="province"
               className="select select-bordered select-sm"
-              onChange={(e) => setProvince(e.target.value)}
-              required
-            >
-              <option disabled value="0">
-                จังหวัด
-              </option>
-              {getProvinces().map((p, index) => (
-                <option key={index} value={p}>
-                  {p}
-                </option>
-              ))}
-            </select>
+              value={info?.province}
+              readOnly
+            />
           </div>
           <div className="form-control">
-            <select
-              defaultValue="0"
+            <input
               name="amphoe"
               className="select select-bordered select-sm"
-              onChange={(e) => setAmphoe(e.target.value)}
-              required
-            >
-              <option disabled value="0">
-                อำเภอ
-              </option>
-              {getAmphoeFromProvince(province!).map((p, index) => (
-                <option key={index} value={p}>
-                  {p}
-                </option>
-              ))}
-            </select>
+              value={info?.amphoe}
+              readOnly
+            ></input>
           </div>
           <div className="form-control">
-            <select
-              defaultValue="0"
+            <input
+              type="text"
               name="district"
               className="select select-bordered select-sm"
-              required
-            >
-              <option disabled value="0">
-                ตำบล
-              </option>
-              {getDistrictsFromAmphoe(province!, amphoe!).map((p, index) => (
-                <option key={index} value={p}>
-                  {p}
-                </option>
-              ))}
-            </select>
+              value={info?.district}
+              readOnly
+            ></input>
           </div>
           <div className="form-control">
             <input
@@ -143,7 +113,8 @@ const NewMemberForm = ({ userId }: NewMemberFormProps) => {
               name="zipcode"
               className="input input-sm input-bordered"
               placeholder="รหัสไปรษณี"
-              required
+              readOnly
+              value={info?.zipcode}
             ></input>
           </div>
         </div>
@@ -157,7 +128,8 @@ const NewMemberForm = ({ userId }: NewMemberFormProps) => {
               name="farmName"
               className="input input-sm input-bordered"
               placeholder="ชื่อฟาร์ม"
-              required
+              readOnly
+              value={info?.farmName}
             ></input>
           </div>
           <div className="form-control">
@@ -166,7 +138,8 @@ const NewMemberForm = ({ userId }: NewMemberFormProps) => {
               name="farmLogo"
               className="input input-sm input-bordered"
               placeholder="เครื่องหมายฟาร์ม"
-              required
+              readOnly
+              value={info?.farmLogo}
             ></input>
           </div>
           <div className="form-control">
@@ -175,63 +148,33 @@ const NewMemberForm = ({ userId }: NewMemberFormProps) => {
               name="farmAddress1"
               className="input input-sm input-bordered"
               placeholder="ที่ตั้งฟาร์มเลขที่"
-              required
+              readOnly
+              value={info?.farmAddress}
             ></input>
           </div>
           <div className="form-control">
-            <select
-              defaultValue="0"
+            <input
               name="farmProvince"
-              onChange={(e) => setFarmProvince(e.target.value)}
               className="select select-bordered select-sm"
-              required
-            >
-              <option disabled value="0">
-                จังหวัด
-              </option>
-              {getProvinces().map((p, index) => (
-                <option key={index} value={p}>
-                  {p}
-                </option>
-              ))}
-            </select>
+              readOnly
+              value={info?.farmProvince}
+            ></input>
           </div>
           <div className="form-control">
-            <select
-              defaultValue="0"
+            <input
               name="farmAmphoe"
-              onChange={(e) => setFarmAmphoe(e.target.value)}
               className="select select-bordered select-sm"
-              required
-            >
-              <option disabled value="0">
-                อำเภอ
-              </option>
-              {getAmphoeFromProvince(farmProvince!).map((p, index) => (
-                <option key={index} value={p}>
-                  {p}
-                </option>
-              ))}
-            </select>
+              readOnly
+              value={info?.farmAmphoe}
+            ></input>
           </div>
           <div className="form-control">
-            <select
-              defaultValue="0"
+            <input
               name="farmDistrict"
               className="select select-bordered select-sm"
-              required
-            >
-              <option disabled value="0">
-                ตำบล
-              </option>
-              {getDistrictsFromAmphoe(farmProvince!, farmAmphoe!).map(
-                (p, index) => (
-                  <option key={index} value={p}>
-                    {p}
-                  </option>
-                ),
-              )}
-            </select>
+              readOnly
+              value={info?.farmDistrict}
+            ></input>
           </div>
           <div className="form-control">
             <input
@@ -239,7 +182,8 @@ const NewMemberForm = ({ userId }: NewMemberFormProps) => {
               name="farmZipCode"
               className="input input-sm input-bordered"
               placeholder="รหัสไปรษณี"
-              required
+              readOnly
+              value={info?.farmZipcode.toString()}
             ></input>
           </div>
         </div>
@@ -253,7 +197,8 @@ const NewMemberForm = ({ userId }: NewMemberFormProps) => {
               name="farmSize1"
               placeholder="จำนวนไร่"
               className="input input-sm input-bordered"
-              required
+              readOnly
+              value={info?.farmSize1}
             ></input>
           </div>
           <div className="form-control">
@@ -262,7 +207,8 @@ const NewMemberForm = ({ userId }: NewMemberFormProps) => {
               name="farmSize2"
               placeholder="จำนวนงาน"
               className="input input-sm input-bordered"
-              required
+              readOnly
+              value={info?.farmSize2}
             ></input>
           </div>
           <div className="form-control">
@@ -271,7 +217,8 @@ const NewMemberForm = ({ userId }: NewMemberFormProps) => {
               name="farmSize3"
               placeholder="จำนวนตารางวา"
               className="input input-sm input-bordered"
-              required
+              readOnly
+              value={info?.farmSize3}
             ></input>
           </div>
         </div>
@@ -282,23 +229,13 @@ const NewMemberForm = ({ userId }: NewMemberFormProps) => {
         </label>
         <div className="grid grid-cols-1 gap-2">
           <div className="form-control">
-            <select
+            <input
               defaultValue="โคเนื้อ"
               name="animalType"
               className="select select-bordered select-sm"
-              required
-            >
-              <option value="โคเนื้อ">โคเนื้อ</option>
-              <option value="โคนม">โคนม</option>
-              <option value="กระบือ">กระบือ</option>
-              <option value="สุกร">สุกร</option>
-              <option value="แพะ">แพะ</option>
-              <option value="แกะ">แกะ</option>
-              <option value="ไก่พื้นเมือง">ไก่พื้นเมือง</option>
-              <option value="ไก่ไข่">ไก่ไข่</option>
-              <option value="นกกระทา">นกกระทา</option>
-              <option value="อื่นๆ">อื่นๆ</option>
-            </select>
+              readOnly
+              value={info?.animalType}
+            ></input>
           </div>
           <div className="form-control">
             <input
@@ -306,6 +243,8 @@ const NewMemberForm = ({ userId }: NewMemberFormProps) => {
               name="animalTypeOther"
               placeholder="อื่นๆ ระบุ"
               className="input input-sm input-bordered"
+              readOnly
+              value={info?.animalTypeOther?.toString()}
             ></input>
           </div>
         </div>
@@ -321,7 +260,8 @@ const NewMemberForm = ({ userId }: NewMemberFormProps) => {
               name="momCount"
               placeholder="จำนวนแม่พันธุ์"
               className="input input-sm input-bordered"
-              required
+              readOnly
+              value={info?.momCount}
             ></input>
           </div>
           <div className="form-control">
@@ -330,7 +270,8 @@ const NewMemberForm = ({ userId }: NewMemberFormProps) => {
               name="momBreed"
               placeholder="สายพันธุ์"
               className="input input-sm input-bordered"
-              required
+              readOnly
+              value={info?.momBreed}
             ></input>
           </div>
           <div className="form-control">
@@ -339,7 +280,8 @@ const NewMemberForm = ({ userId }: NewMemberFormProps) => {
               name="dadCount"
               placeholder="จำนวนพ่อพันธุ์"
               className="input input-sm input-bordered"
-              required
+              readOnly
+              value={info?.dadCount}
             ></input>
           </div>
           <div className="form-control">
@@ -348,7 +290,8 @@ const NewMemberForm = ({ userId }: NewMemberFormProps) => {
               name="dadBreed"
               placeholder="สายพันธุ์"
               className="input input-sm input-bordered"
-              required
+              readOnly
+              value={info?.dadBreed}
             ></input>
           </div>
           <div className="form-control">
@@ -357,7 +300,8 @@ const NewMemberForm = ({ userId }: NewMemberFormProps) => {
               name="otherAnimalSize"
               placeholder="ขนาดอื่นๆ"
               className="input input-sm input-bordered"
-              required
+              readOnly
+              value={info?.dadCount}
             ></input>
           </div>
           <div className="form-control">
@@ -366,7 +310,8 @@ const NewMemberForm = ({ userId }: NewMemberFormProps) => {
               name="children"
               placeholder="ลูก"
               className="input input-sm input-bordered"
-              required
+              readOnly
+              value={info?.children}
             ></input>
           </div>
           <div className="form-control">
@@ -375,7 +320,8 @@ const NewMemberForm = ({ userId }: NewMemberFormProps) => {
               name="totalAnimalInFarm"
               placeholder="จำนวนรวมทั้งสิ้น"
               className="input input-sm input-bordered"
-              required
+              readOnly
+              value={info?.totalAnimalInFarm}
             ></input>
           </div>
         </div>
@@ -391,6 +337,8 @@ const NewMemberForm = ({ userId }: NewMemberFormProps) => {
                 name="farmObj1"
                 className="checkbox"
                 value="ผลิตพันธุ์แท้"
+                readOnly
+                checked={info?.farmObj1 != null}
               />
             </label>
           </div>
@@ -402,6 +350,8 @@ const NewMemberForm = ({ userId }: NewMemberFormProps) => {
                 className="checkbox"
                 name="farmObj2"
                 value="ผลิตลูกผสม"
+                readOnly
+                checked={info?.farmObj2 != null}
               />
             </label>
           </div>
@@ -413,6 +363,8 @@ const NewMemberForm = ({ userId }: NewMemberFormProps) => {
                 name="farmObj3"
                 className="checkbox"
                 value="ผลิตเพื่อขุน"
+                readOnly
+                checked={info?.farmObj3 != null}
               />
             </label>
           </div>
@@ -424,6 +376,8 @@ const NewMemberForm = ({ userId }: NewMemberFormProps) => {
                 className="checkbox"
                 value="อนุรักษ์"
                 name="farmObj4"
+                readOnly
+                checked={info?.farmObj4 != null}
               />
             </label>
           </div>
@@ -434,6 +388,8 @@ const NewMemberForm = ({ userId }: NewMemberFormProps) => {
             name="farmObjOther"
             type="text"
             placeholder="อื่นๆ ระบุ"
+            readOnly
+            value={info?.farmObjOther?.toString()}
           ></input>
         </div>
       </div>
@@ -446,6 +402,8 @@ const NewMemberForm = ({ userId }: NewMemberFormProps) => {
                 type="radio"
                 name="radioGrass"
                 className="radio"
+                checked={info?.grassField == "มี"}
+                readOnly
                 value="มี"
               />
               <span className="label-text">มี</span>
@@ -458,6 +416,8 @@ const NewMemberForm = ({ userId }: NewMemberFormProps) => {
                 name="radioGrass"
                 className="radio"
                 value="ไม่มี"
+                readOnly
+                checked={info?.grassField == "ไม่มี"}
               />
               <span className="label-text">ไม่มี</span>
             </label>
@@ -474,6 +434,8 @@ const NewMemberForm = ({ userId }: NewMemberFormProps) => {
                 name="radioWater"
                 className="radio"
                 value="น้ำประปา"
+                readOnly
+                checked={info?.water == "น้ำประปา"}
               />
               <span className="label-text">น้ำประปา</span>
             </label>
@@ -485,6 +447,8 @@ const NewMemberForm = ({ userId }: NewMemberFormProps) => {
                 name="radioWater"
                 className="radio"
                 value="น้ำบาดาล"
+                readOnly
+                checked={info?.water == "น้ำบาดาล"}
               />
               <span className="label-text">น้ำบาดาล</span>
             </label>
@@ -496,6 +460,8 @@ const NewMemberForm = ({ userId }: NewMemberFormProps) => {
                 name="radioWater"
                 className="radio"
                 value="น้ำบ่อ"
+                readOnly
+                checked={info?.water == "น้ำบ่อ"}
               />
               <span className="label-text">น้ำบ่อ</span>
             </label>
@@ -507,6 +473,8 @@ const NewMemberForm = ({ userId }: NewMemberFormProps) => {
                 name="radioWater"
                 className="radio"
                 value="น้ำคลอง/แม่น้ำ"
+                checked={info?.water == "น้ำตลอง/แม่น้ำ"}
+                readOnly
               />
               <span className="label-text">น้ำคลอง/แม่น้ำ</span>
             </label>
@@ -518,6 +486,8 @@ const NewMemberForm = ({ userId }: NewMemberFormProps) => {
             name="radioWaterOther"
             type="text"
             placeholder="อื่นๆ ระบุ"
+            readOnly
+            checked={info?.water == "อื่นๆ ระบุ"}
           ></input>
         </div>
       </div>
@@ -531,6 +501,8 @@ const NewMemberForm = ({ userId }: NewMemberFormProps) => {
                 name="radioFood"
                 className="radio"
                 value="อาหารธรรมชาติ"
+                readOnly
+                checked={info?.food == "อาหารธรรมชาติ"}
               />
               <span className="label-text">อาหารธรรมชาติ</span>
             </label>
@@ -542,6 +514,8 @@ const NewMemberForm = ({ userId }: NewMemberFormProps) => {
                 name="radioFood"
                 className="radio"
                 value="อาหารสำเร็จรูป"
+                readOnly
+                checked={info?.food == "อาหารสำเร็จรูป"}
               />
               <span className="label-text">อาหารสำเร็จรูป</span>
             </label>
@@ -553,6 +527,8 @@ const NewMemberForm = ({ userId }: NewMemberFormProps) => {
             name="radioFoodOther"
             type="text"
             placeholder="อื่นๆ ระบุ"
+            readOnly
+            value={info?.foodOther?.toString()}
           ></input>
         </div>
       </div>
@@ -566,6 +542,8 @@ const NewMemberForm = ({ userId }: NewMemberFormProps) => {
                 name="radioTreat"
                 className="radio"
                 value="ปล่อยแทะเล็ม"
+                readOnly
+                checked={info?.treat == "ปล่อยแทะเล็ม"}
               />
               <span className="label-text">ปล่อยแทะเล็ม</span>
             </label>
@@ -577,6 +555,8 @@ const NewMemberForm = ({ userId }: NewMemberFormProps) => {
                 name="radioTreat"
                 className="radio"
                 value="ขังคอก/ยืนโรง"
+                readOnly
+                checked={info?.treat == "ขังคอก/ยืนโรง"}
               />
               <span className="label-text">ขังคอก/ยืนโรง</span>
             </label>
@@ -588,6 +568,8 @@ const NewMemberForm = ({ userId }: NewMemberFormProps) => {
                 name="radioTreat"
                 className="radio"
                 value="กึ่งขังกึ่งปล่อย"
+                readOnly
+                checked={info?.treat == "กึ่งขังกึ่งปล่อย"}
               />
               <span className="label-text">กึ่งขังกึ่งปล่อย</span>
             </label>
@@ -599,6 +581,8 @@ const NewMemberForm = ({ userId }: NewMemberFormProps) => {
             name="radioTreatOther"
             type="text"
             placeholder="อื่นๆ ระบุ"
+            readOnly
+            value={info?.treatOther?.toString()}
           ></input>
         </div>
       </div>
@@ -612,6 +596,8 @@ const NewMemberForm = ({ userId }: NewMemberFormProps) => {
                 name="radioCertificate"
                 className="radio"
                 value="มี"
+                readOnly
+                checked={info?.certificate == "มี"}
               />
               <span className="label-text">มี</span>
             </label>
@@ -623,6 +609,8 @@ const NewMemberForm = ({ userId }: NewMemberFormProps) => {
                 name="radioCertificate"
                 className="radio"
                 value="ไม่มี"
+                readOnly
+                checked={info?.certificate == "ไม่มี"}
               />
               <span className="label-text">ไม่มี</span>
             </label>
@@ -639,6 +627,8 @@ const NewMemberForm = ({ userId }: NewMemberFormProps) => {
                 name="radioWaterTreat"
                 className="radio"
                 value="มี"
+                readOnly
+                checked={info?.waterTreat == "มี"}
               />
               <span className="label-text">มี</span>
             </label>
@@ -650,6 +640,8 @@ const NewMemberForm = ({ userId }: NewMemberFormProps) => {
                 name="radioWaterTreat"
                 className="radio"
                 value="ไม่มี"
+                readOnly
+                checked={info?.certificate == "ไม่มี"}
               />
               <span className="label-text">ไม่มี</span>
             </label>
@@ -663,58 +655,70 @@ const NewMemberForm = ({ userId }: NewMemberFormProps) => {
           name="farmLocation"
           placeholder="เลือกจากแผนที่"
           className="input input-sm input-bordered"
+          readOnly
+          value={info?.farmLocation}
         />
       </div>
       <div className="form-control">
         <label className="label label-text">
           ภาพบัตรประชาชน (เฉพาะด้านหน้า)
         </label>
-        <input
-          type="file"
-          name="idCardImage"
-          accept="image/png, image/jpg, image/jpeg"
-          className="file-input file-input-bordered file-input-sm"
-          required
-        />
+        <figure className="flex w-full justify-center">
+          <Image
+            className="max-w-64 rounded-xl"
+            src={info?.idCardImage ?? "/images/logo.png"}
+            width={1000}
+            height={760}
+            alt="id-card-image"
+          />
+        </figure>
       </div>
       <div className="form-group">
         <label className="label label-text">ภาพถ่ายฟาร์ม 4 ภาพ</label>
         <div className="grid grid-cols-1 gap-2">
           <div className="form-control">
-            <input
-              type="file"
-              name="farmImage1"
-              accept="image/png, image/jpg, image/jpeg"
-              className="file-input file-input-bordered file-input-sm"
-              required
-            />
+            <figure className="flex w-full justify-center">
+              <Image
+                className="max-w-64 rounded-xl"
+                src={info?.farmImage1 ?? "/images/logo.png"}
+                width={1000}
+                height={760}
+                alt="id-card-image"
+              />
+            </figure>
           </div>
           <div className="form-control">
-            <input
-              type="file"
-              name="farmImage2"
-              accept="image/png, image/jpg, image/jpeg"
-              className="file-input file-input-bordered file-input-sm"
-              required
-            />
+            <figure className="flex w-full justify-center">
+              <Image
+                className="max-w-64 rounded-xl"
+                src={info?.farmImage2 ?? "/images/logo.png"}
+                width={1000}
+                height={760}
+                alt="id-card-image"
+              />
+            </figure>
           </div>
           <div className="form-control">
-            <input
-              type="file"
-              name="farmImage3"
-              accept="image/png, image/jpg, image/jpeg"
-              className="file-input file-input-bordered file-input-sm"
-              required
-            />
+            <figure className="flex w-full justify-center">
+              <Image
+                className="max-w-64 rounded-xl"
+                src={info?.farmImage3 ?? "/images/logo.png"}
+                width={1000}
+                height={760}
+                alt="id-card-image"
+              />
+            </figure>
           </div>
           <div className="form-control">
-            <input
-              type="file"
-              name="farmImage4"
-              accept="image/png, image/jpg, image/jpeg"
-              className="file-input file-input-bordered file-input-sm"
-              required
-            />
+            <figure className="flex w-full justify-center">
+              <Image
+                className="max-w-64 rounded-xl"
+                src={info?.farmImage4 ?? "/images/logo.png"}
+                width={1000}
+                height={760}
+                alt="id-card-image"
+              />
+            </figure>
           </div>
         </div>
       </div>
@@ -731,6 +735,10 @@ const NewMemberForm = ({ userId }: NewMemberFormProps) => {
                 name="radioCategory"
                 className="radio"
                 value="ใช้ประโยชน์พันธุกรรมและเทคโนโลยี"
+                readOnly
+                checked={
+                  info?.certificate == "ใช้ประโยชน์พันธุกรรมและเทคโนโลยี"
+                }
               />
               <span className="label-text">
                 ใช้ประโยชน์พันธุกรรมและเทคโนโลยี
@@ -744,6 +752,8 @@ const NewMemberForm = ({ userId }: NewMemberFormProps) => {
                 name="radioCategory"
                 className="radio"
                 value="ปรับปรุงพันธุ์และขยายพันธุ์"
+                readOnly
+                checked={info?.category == "ปรับปรุงพันธุ์และขยายพันธุ์"}
               />
               <span className="label-text">ปรับปรุงพันธุ์และขยายพันธุ์</span>
             </label>
@@ -755,6 +765,8 @@ const NewMemberForm = ({ userId }: NewMemberFormProps) => {
                 name="radioCategory"
                 className="radio"
                 value="อนุรักษ์สัตว์พื้นเมือง"
+                readOnly
+                checked={info?.category == "อนุรักษ์สัตว์พื้นเมือง"}
               />
               <span className="label-text">อนุรักษ์สัตว์พื้นเมือง</span>
             </label>
@@ -773,7 +785,8 @@ const NewMemberForm = ({ userId }: NewMemberFormProps) => {
                 name="radioAccept"
                 className="radio"
                 value="y"
-                required
+                readOnly
+                checked={info?.accept == "y"}
               />
               <span className="label-accept">ยินยอม</span>
             </label>
@@ -785,30 +798,55 @@ const NewMemberForm = ({ userId }: NewMemberFormProps) => {
                 name="radioAccept"
                 className="radio"
                 value="n"
-                required
+                readOnly
+                checked={info?.accept == "n"}
               />
               <span className="label-accept">ไม่ยินยอม</span>
             </label>
           </div>
         </div>
       </div>
-      <SubmitNewUser />
+      {level == "1" && info?.appointment == null ? (
+        <>
+          <div className="form-control">
+            <label className="label label-text text-xl font-bold">
+              นัดวันเพื่อประเมินคำร้อง (จนท.ระดับจังหวัดระบุ)
+            </label>
+            <input
+              name="appointment"
+              type="date"
+              className="input input-bordered"
+              required
+            />
+          </div>
+          <SubmitAppointment />
+          <Link
+            className="btn btn-neutral rounded-full"
+            href="/approvement/list"
+          >
+            กลับ
+          </Link>
+        </>
+      ) : (
+        <>
+          <div className="text-erro w-full text-center font-bold">
+            นัดวันประเมิณ{" "}
+            {info?.appointment == null ? (
+              <span className="text-error">ยังไม่มีการนัด</span>
+            ) : (
+              dayjs(info?.appointment).format("DD/MM/YYYY")
+            )}
+          </div>
+          <Link
+            className="btn btn-secondary rounded-full"
+            href="/approvement/list"
+          >
+            กลับ
+          </Link>
+        </>
+      )}
     </form>
   );
 };
 
-const SubmitNewUser = () => {
-  const { pending } = useFormStatus();
-  console.log(pending);
-  return (
-    <button
-      type="submit"
-      disabled={pending}
-      className="btn btn-secondary rounded-full shadow-xl"
-    >
-      {!pending ? <span>ยืนยันการลงทะเบียน</span> : <span>กำลังบันทึก...</span>}
-    </button>
-  );
-};
-
-export default NewMemberForm;
+export default RequestForm;

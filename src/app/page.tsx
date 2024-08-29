@@ -28,7 +28,7 @@ export default function HomePage() {
           </div>
         </div>
         <Link
-          href="/auth"
+          href="/login"
           className="btn btn-secondary btn-sm min-w-[200px] rounded-full"
         >
           เข้าสู่ระบบ
