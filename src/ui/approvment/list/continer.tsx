@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import RequestTab from "./request-tab";
 import AppointTab from "./appoint-tab";
-import { RawRegisterData } from "@prisma/client";
+import { type RawRegisterData } from "@prisma/client";
 
 interface ApprovementContainerProps {
   waitList: RawRegisterData[];

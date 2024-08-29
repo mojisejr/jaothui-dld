@@ -10,7 +10,7 @@ import {
   getWaitForApprovementListForProvinceAdmin,
   getWaitForApprovmentListForAll,
 } from "~/actions/approvment";
-import { RawRegisterData } from "@prisma/client";
+import { type RawRegisterData } from "@prisma/client";
 
 const Page = async () => {
   const session = await auth();

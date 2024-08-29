@@ -1,5 +1,5 @@
 "use client";
-import { RawRegisterData } from "@prisma/client";
+import { type RawRegisterData } from "@prisma/client";
 import Link from "next/link";
 import React from "react";
 import { handleConfirmEdit } from "~/actions/edit-member-info";

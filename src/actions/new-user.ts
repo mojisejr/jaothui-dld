@@ -1,5 +1,5 @@
 "use server";
-import { NewUserDTO } from "~/interfaces/new-user";
+import { type NewUserDTO } from "~/interfaces/new-user";
 import { hashGen } from "~/lib/hashing";
 import { db } from "~/server/db";
 import { revalidatePath } from "next/cache";

@@ -1,6 +1,6 @@
 "use server";
 
-import { RawRegisterData } from "@prisma/client";
+import { type RawRegisterData } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { formUpdateDataParser } from "~/lib/parser";

@@ -9,7 +9,7 @@ import {
 
 import Image from "next/image";
 import { handleConfirmEdit } from "~/actions/edit-member-info";
-import { RawRegisterData } from "@prisma/client";
+import { type RawRegisterData } from "@prisma/client";
 
 interface ApprovementForm1Props {
   approvementInfo: RawRegisterData;

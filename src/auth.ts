@@ -1,4 +1,4 @@
-import NextAuth, { CredentialsSignin, DefaultSession } from "next-auth";
+import NextAuth, { CredentialsSignin } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { db } from "./server/db";
 import { verifyPassword } from "./lib/hashing";

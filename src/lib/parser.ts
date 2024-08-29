@@ -1,11 +1,11 @@
-import { RawRegisterData } from "@prisma/client";
+import { type RawRegisterData } from "@prisma/client";
 import {
   updateFarmImage,
   updateIdCardImage,
   uploadFarmImage,
   uploadIdCardImage,
 } from "~/actions/upload";
-import { RawFormData } from "~/interfaces/new-member";
+import { type RawFormData } from "~/interfaces/new-member";
 
 export const formDataParser = async (formData: FormData, userId: string) => {
   const idCardImageUrl = await uploadIdCardImage(

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import React from "react";
 import dayjs from "dayjs";
-import { RawRegisterData } from "@prisma/client";
+import { type RawRegisterData } from "@prisma/client";
 
 interface AppointTabProps {
   appointedList: RawRegisterData[];
