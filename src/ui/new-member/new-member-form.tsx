@@ -1,13 +1,14 @@
 "use client";
 import React, { useState } from "react";
 import { createNewMemberInfo } from "~/actions/new-member";
-import { useFormStatus } from "react-dom";
 
 import {
   getProvinces,
   getAmphoeFromProvince,
   getDistrictsFromAmphoe,
 } from "~/lib/address-helper";
+import SubmitNewUser from "./new-member-submit-button";
+import { logout } from "~/actions/logout";
 
 interface NewMemberFormProps {
   userId: string;
@@ -25,7 +26,7 @@ const NewMemberForm = ({ userId }: NewMemberFormProps) => {
   return (
     <form
       action={createNewMemberInfoWithUserId}
-      className="grid grid-cols-1 gap-2"
+      className="grid grid-cols-1 gap-2 md:max-w-md"
     >
       <div className="grid grid-cols-2 gap-2">
         <div className="form-control">
@@ -793,21 +794,10 @@ const NewMemberForm = ({ userId }: NewMemberFormProps) => {
         </div>
       </div>
       <SubmitNewUser />
+      <button onClick={() => logout()} className="btn btn-ghost rounded-full">
+        ออกจากระบบ
+      </button>
     </form>
-  );
-};
-
-const SubmitNewUser = () => {
-  const { pending } = useFormStatus();
-  console.log(pending);
-  return (
-    <button
-      type="submit"
-      disabled={pending}
-      className="btn btn-secondary rounded-full shadow-xl"
-    >
-      {!pending ? <span>ยืนยันการลงทะเบียน</span> : <span>กำลังบันทึก...</span>}
-    </button>
   );
 };
 

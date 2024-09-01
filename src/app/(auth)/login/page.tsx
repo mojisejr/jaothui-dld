@@ -27,7 +27,7 @@ export default async function Page() {
           <h1 className="text-2xl font-semibold">ยินดีต้อนรับ</h1>
           <h3 className="font-thin">โปรดเข้าสู่ระบบ</h3>
         </div>
-        <form action={login} className="grid w-full grid-cols-1 gap-2">
+        <form action={login} className="grid w-full max-w-md grid-cols-1 gap-2">
           <input
             className="input input-sm input-bordered rounded-2xl"
             name="username"

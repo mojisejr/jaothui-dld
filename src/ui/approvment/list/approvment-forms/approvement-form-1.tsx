@@ -10,6 +10,7 @@ import {
 import Image from "next/image";
 import { handleConfirmEdit } from "~/actions/edit-member-info";
 import { type RawRegisterData } from "@prisma/client";
+import EditButton from "./approvement-edit.button";
 
 interface ApprovementForm1Props {
   approvementInfo: RawRegisterData;
@@ -57,6 +58,7 @@ const ApprovementForm1 = ({
               placeholder="ชื่อ"
               value={info?.firstname}
               readOnly={edit}
+              required
             ></input>
           ) : (
             <input
@@ -65,6 +67,7 @@ const ApprovementForm1 = ({
               className={`input input-sm input-bordered w-full ${edit ? null : "input-primary"}`}
               placeholder={info?.firstname}
               readOnly={edit}
+              required
             ></input>
           )}
         </div>
@@ -78,6 +81,7 @@ const ApprovementForm1 = ({
             placeholder="นามสกุล"
             value={info?.lastname}
             readOnly={edit}
+            required
           ></input>
         ) : (
           <input
@@ -86,6 +90,7 @@ const ApprovementForm1 = ({
             className={`input input-sm input-bordered w-full ${edit ? null : "input-primary"}`}
             placeholder={info?.lastname}
             readOnly={edit}
+            required
           ></input>
         )}
       </div>
@@ -98,6 +103,7 @@ const ApprovementForm1 = ({
             placeholder="เบอร์โทรศัพท์"
             readOnly={edit}
             value={info?.tel}
+            required
           ></input>
         ) : (
           <input
@@ -106,6 +112,7 @@ const ApprovementForm1 = ({
             className={`input input-sm input-bordered w-full ${edit ? null : "input-primary"}`}
             placeholder={info?.tel}
             readOnly={edit}
+            required
           ></input>
         )}
       </div>
@@ -121,6 +128,7 @@ const ApprovementForm1 = ({
             placeholder="เลขบัตรประชาชน (ไม่ต้องเติมขีด)"
             value={info?.idCard.toString()}
             readOnly={edit}
+            required
           ></input>
         ) : (
           <input
@@ -129,6 +137,7 @@ const ApprovementForm1 = ({
             className={`input input-sm input-bordered w-full ${edit ? null : "input-primary"}`}
             placeholder={info?.idCard.toString()}
             readOnly={edit}
+            required
           ></input>
         )}
       </div>
@@ -146,6 +155,7 @@ const ApprovementForm1 = ({
                 placeholder="บ้านเลขที่"
                 value={info?.address1}
                 readOnly={edit}
+                required
               ></input>
             ) : (
               <input
@@ -154,6 +164,7 @@ const ApprovementForm1 = ({
                 className={`input input-sm input-bordered w-full ${edit ? null : "input-primary"}`}
                 placeholder={info?.address1}
                 readOnly={edit}
+                required
               ></input>
             )}
           </div>
@@ -164,6 +175,7 @@ const ApprovementForm1 = ({
                 className={`select select-bordered select-sm ${edit ? null : "select-primary"}`}
                 value={info?.province}
                 readOnly={edit}
+                required
               />
             ) : (
               <select
@@ -191,6 +203,7 @@ const ApprovementForm1 = ({
                 className={`select select-bordered select-sm ${edit ? null : "select-primary"}`}
                 value={info?.amphoe}
                 readOnly={edit}
+                required
               ></input>
             ) : (
               <select
@@ -667,7 +680,7 @@ const ApprovementForm1 = ({
               <input
                 type="number"
                 name="children"
-                placeholder={info?.children.toString(0)}
+                placeholder={info?.children.toString()}
                 className={`input input-sm input-bordered w-full ${edit ? null : "input-primary"}`}
                 readOnly={edit}
               ></input>
@@ -1387,11 +1400,7 @@ const ApprovementForm1 = ({
         </div>
       </div>
       <div className="flex w-full justify-center">
-        {!edit ? (
-          <button type="submit" className="btn btn-secondary rounded-full">
-            บันทึกการแก้ไข
-          </button>
-        ) : null}
+        {!edit ? <EditButton /> : null}
       </div>
       {edit ? (
         <div className="flex w-full justify-between">

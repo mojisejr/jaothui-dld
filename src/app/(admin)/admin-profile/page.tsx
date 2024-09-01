@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { auth } from "~/auth";
 import { logout } from "~/actions/logout";
 import { getAdminInfo } from "~/actions/admin";
-import { getRequestCount } from "~/actions/approvment";
+import { getCompletedCount, getRequestCount } from "~/actions/approvment";
 import Link from "next/link";
 
 const Page = async () => {
@@ -18,7 +18,12 @@ const Page = async () => {
   // if (user.role != process.env.ADMIN || info?.AdminPosition == null)
   //   redirect("/profile");
 
-  const count = await getRequestCount(
+  const requestCount = await getRequestCount(
+    info?.AdminPosition?.level ?? "0",
+    info?.AdminPosition?.province ?? "",
+  );
+
+  const completedCount = await getCompletedCount(
     info?.AdminPosition?.level ?? "0",
     info?.AdminPosition?.province ?? "",
   );
@@ -34,7 +39,7 @@ const Page = async () => {
   // }
 
   return (
-    <div className="w-full rounded-2xl bg-base-100 text-base-content">
+    <div className="w-full max-w-md rounded-2xl bg-base-100 text-base-content">
       <div className="grid-col-2 grid gap-4 p-4">
         <div className="w-full">
           <div className="text-xl">
@@ -55,7 +60,10 @@ const Page = async () => {
           </div>
           <div className="flex-start flex w-full flex-col px-2">
             <div>ชื่อ : {`${info?.firstname} ${info?.lastname}`}</div>
-            <div>ตำแหน่ง : {info?.AdminPosition?.title}</div>
+            <div>
+              ตำแหน่ง : {info?.AdminPosition?.title}
+              {info?.AdminPosition?.province}
+            </div>
             <div>เบอร์ติดต่อ : {`0${info?.username}`}</div>
           </div>
           <div className="flex w-full flex-col gap-2">
@@ -68,7 +76,7 @@ const Page = async () => {
                 href="/approvement/list"
                 className="btn-base-300 btn btn-sm rounded-full"
               >
-                {count}
+                {requestCount}
               </Link>
             </div>
             <div className="flex w-full items-center justify-between rounded-2xl bg-base-100 px-4 py-2 shadow-sm">
@@ -77,7 +85,7 @@ const Page = async () => {
                 <h3 className="text-xs">เครือข่ายสัตว์พันธุ์ดีกรมปศุสัตว์</h3>
               </div>
               <button className="btn-base-300 btn btn-sm rounded-full">
-                0
+                {completedCount}
               </button>
             </div>
             <div className="flex w-full items-center justify-between rounded-2xl bg-base-100 px-4 py-2 shadow-sm">

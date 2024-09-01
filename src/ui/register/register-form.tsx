@@ -10,7 +10,10 @@ const RegisterForm = () => {
       <div className="grid w-full grid-cols-1 place-items-center">
         <h1 className="text-2xl font-semibold">สร้างบัญชี</h1>
       </div>
-      <form action={createNewMember} className="grid w-full grid-cols-1 gap-2">
+      <form
+        action={createNewMember}
+        className="grid w-full max-w-md grid-cols-1 gap-2"
+      >
         <input
           className="input input-sm input-bordered rounded-2xl"
           name="firstname"

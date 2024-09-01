@@ -6,9 +6,19 @@ import { auth } from "~/auth";
 const Page = async ({
   searchParams,
 }: {
-  searchParams: { title: string; subtitle: string };
+  searchParams: { type: string; id?: string; userId?: string };
 }) => {
-  const { title, subtitle } = searchParams;
+  const { type, id } = searchParams;
+  let title = "";
+
+  if (type == "edit") {
+    title = "แก้ไขข้อมูลเรียบร้อยแล้ว";
+  } else if (type == "approved") {
+    title = "ยืนยันการประเมินเรียบร้อยแล้ว";
+  } else if (type == "accept") {
+    title = "อนุมัติเรียบร้อยแล้ว";
+  }
+
   const session = await auth();
 
   const user = session?.user;
@@ -23,10 +33,15 @@ const Page = async ({
         </figure>
         <div>
           <div className="text-xl font-bold">{title}</div>
-          <div className="text-sm">{subtitle}</div>
+          <div className="text-sm">
+            {searchParams.userId ? searchParams.userId : null}
+          </div>
         </div>
-        <Link href="/approvement/list" className="btn btn-secondary">
-          ไปที่หน้าหลัก
+        <Link
+          href={`/approvement/approve/${id}?step=0`}
+          className="btn btn-secondary"
+        >
+          กลับ
         </Link>
       </div>
     </div>

@@ -2,7 +2,8 @@
 import { type RawRegisterData } from "@prisma/client";
 import Link from "next/link";
 import React from "react";
-import { handleConfirmEdit } from "~/actions/edit-member-info";
+import { handleSubmitApprovementInfo } from "~/actions/approvment";
+import ApprovementConfirmButton from "./approvement-approve-button";
 
 interface ApprovementForm2Props {
   approvementInfo: RawRegisterData;
@@ -16,10 +17,14 @@ const ApprovementForm2 = ({
   level,
 }: ApprovementForm2Props) => {
   const info = approvementInfo;
-  const confirmEditWithInfo = handleConfirmEdit.bind(null, info);
+  const confirmApproveWithInfo = handleSubmitApprovementInfo.bind(
+    null,
+    info.id,
+    adminId,
+  );
 
   return (
-    <form action={confirmEditWithInfo} className="grid grid-cols-1 gap-2">
+    <form action={confirmApproveWithInfo} className="grid grid-cols-1 gap-2">
       <div className="form-group">
         <label className="label label-text">แปลงหญ้าสำหรับสัตว์เลี้ยง</label>
         <div className="grid grid-cols-1 gap-2">
@@ -59,7 +64,7 @@ const ApprovementForm2 = ({
             <label className="label flex cursor-pointer justify-start gap-4">
               <input
                 type="radio"
-                name="radioFeedingBowl"
+                name="feedingBowl"
                 className="radio"
                 value="มี"
                 required
@@ -71,7 +76,7 @@ const ApprovementForm2 = ({
             <label className="label flex cursor-pointer justify-start gap-4">
               <input
                 type="radio"
-                name="radioFeedingBowl"
+                name="feedingBowl"
                 className="radio"
                 value="n"
                 required
@@ -83,7 +88,7 @@ const ApprovementForm2 = ({
         <div className="form-control">
           <input
             className="input input-sm input-bordered"
-            name="radioFeedingBowlOther"
+            name="feedingBowlOther"
             type="text"
             placeholder="อื่นๆ ระบุ"
           ></input>
@@ -96,7 +101,7 @@ const ApprovementForm2 = ({
             <label className="label flex cursor-pointer justify-start gap-4">
               <input
                 type="radio"
-                name="radioHousing"
+                name="greenhouse"
                 className="radio"
                 value="มี"
                 required
@@ -108,7 +113,7 @@ const ApprovementForm2 = ({
             <label className="label flex cursor-pointer justify-start gap-4">
               <input
                 type="radio"
-                name="radioHousing"
+                name="greenhouse"
                 className="radio"
                 value="n"
                 required
@@ -120,7 +125,7 @@ const ApprovementForm2 = ({
         <div className="form-control">
           <input
             className="input input-sm input-bordered"
-            name="radioHousingOther"
+            name="greenhouseOther"
             type="text"
             placeholder="อื่นๆ ระบุ"
           ></input>
@@ -133,7 +138,7 @@ const ApprovementForm2 = ({
             <label className="label flex cursor-pointer justify-start gap-4">
               <input
                 type="radio"
-                name="radioWaterBowl"
+                name="waterBowl"
                 className="radio"
                 value="มี"
                 required
@@ -145,7 +150,7 @@ const ApprovementForm2 = ({
             <label className="label flex cursor-pointer justify-start gap-4">
               <input
                 type="radio"
-                name="radioWaterBowl"
+                name="waterBowl"
                 className="radio"
                 value="n"
                 required
@@ -157,7 +162,7 @@ const ApprovementForm2 = ({
         <div className="form-control">
           <input
             className="input input-sm input-bordered"
-            name="radioWaterBowlOther"
+            name="waterBowlOther"
             type="text"
             placeholder="อื่นๆ ระบุ"
           ></input>
@@ -169,7 +174,7 @@ const ApprovementForm2 = ({
           <div className="form-control">
             <input
               type="file"
-              name="waterSourceImage1"
+              name="waterImage1"
               accept="image/png, image/jpg, image/jpeg"
               className="file-input file-input-bordered file-input-sm"
               required
@@ -178,7 +183,7 @@ const ApprovementForm2 = ({
           <div className="form-control">
             <input
               type="file"
-              name="waterSourceImage2"
+              name="waterImage2"
               accept="image/png, image/jpg, image/jpeg"
               className="file-input file-input-bordered file-input-sm"
               required
@@ -215,7 +220,7 @@ const ApprovementForm2 = ({
           <div className="form-control">
             <input
               type="file"
-              name="treatMethodImage1"
+              name="treatImage1"
               accept="image/png, image/jpg, image/jpeg"
               className="file-input file-input-bordered file-input-sm"
               required
@@ -224,7 +229,7 @@ const ApprovementForm2 = ({
           <div className="form-control">
             <input
               type="file"
-              name="treatMethodImage2"
+              name="treatImage2"
               accept="image/png, image/jpg, image/jpeg"
               className="file-input file-input-bordered file-input-sm"
               required
@@ -233,7 +238,7 @@ const ApprovementForm2 = ({
           <div className="form-control">
             <input
               type="file"
-              name="treatMethodImage3"
+              name="treatImage3"
               accept="image/png, image/jpg, image/jpeg"
               className="file-input file-input-bordered file-input-sm"
               required
@@ -271,7 +276,7 @@ const ApprovementForm2 = ({
             <label className="label flex cursor-pointer justify-start gap-4">
               <input
                 type="radio"
-                name="radioTag"
+                name="tag"
                 className="radio"
                 value="มี"
                 required
@@ -283,7 +288,7 @@ const ApprovementForm2 = ({
             <label className="label flex cursor-pointer justify-start gap-4">
               <input
                 type="radio"
-                name="radioTag"
+                name="tag"
                 className="radio"
                 value="n"
                 required
@@ -300,7 +305,7 @@ const ApprovementForm2 = ({
             <label className="label flex cursor-pointer justify-start gap-4">
               <input
                 type="radio"
-                name="radioCertify"
+                name="certificate"
                 className="radio"
                 value="มี"
                 required
@@ -312,7 +317,7 @@ const ApprovementForm2 = ({
             <label className="label flex cursor-pointer justify-start gap-4">
               <input
                 type="radio"
-                name="radioCertify"
+                name="certificate"
                 className="radio"
                 value="n"
                 required
@@ -331,7 +336,7 @@ const ApprovementForm2 = ({
             <label className="label flex cursor-pointer justify-start gap-4">
               <input
                 type="radio"
-                name="radioProduct"
+                name="product"
                 className="radio"
                 value="มี"
                 required
@@ -343,7 +348,7 @@ const ApprovementForm2 = ({
             <label className="label flex cursor-pointer justify-start gap-4">
               <input
                 type="radio"
-                name="radioProduct"
+                name="product"
                 className="radio"
                 value="n"
                 required
@@ -362,7 +367,7 @@ const ApprovementForm2 = ({
             <label className="label flex cursor-pointer justify-start gap-4">
               <input
                 type="radio"
-                name="radioHealthCare"
+                name="health"
                 className="radio"
                 value="มี"
                 required
@@ -374,7 +379,7 @@ const ApprovementForm2 = ({
             <label className="label flex cursor-pointer justify-start gap-4">
               <input
                 type="radio"
-                name="radioHealthCare"
+                name="health"
                 className="radio"
                 value="n"
                 required
@@ -391,7 +396,7 @@ const ApprovementForm2 = ({
             <label className="label flex cursor-pointer justify-start gap-4">
               <input
                 type="radio"
-                name="radioFoodManage"
+                name="foodManagement"
                 className="radio"
                 value="มี"
                 required
@@ -403,7 +408,7 @@ const ApprovementForm2 = ({
             <label className="label flex cursor-pointer justify-start gap-4">
               <input
                 type="radio"
-                name="radioFoodManage"
+                name="foodManagement"
                 className="radio"
                 value="n"
                 required
@@ -420,7 +425,7 @@ const ApprovementForm2 = ({
             <label className="label flex cursor-pointer justify-start gap-4">
               <input
                 type="radio"
-                name="radioMarket"
+                name="market"
                 className="radio"
                 value="มี"
                 required
@@ -432,7 +437,7 @@ const ApprovementForm2 = ({
             <label className="label flex cursor-pointer justify-start gap-4">
               <input
                 type="radio"
-                name="radioMarket"
+                name="market"
                 className="radio"
                 value="n"
                 required
@@ -449,7 +454,7 @@ const ApprovementForm2 = ({
             <label className="label flex cursor-pointer justify-start gap-4">
               <input
                 type="radio"
-                name="radioTag"
+                name="result"
                 className="radio"
                 value="มี"
                 required
@@ -461,7 +466,7 @@ const ApprovementForm2 = ({
             <label className="label flex cursor-pointer justify-start gap-4">
               <input
                 type="radio"
-                name="radioTag"
+                name="result"
                 className="radio"
                 value="n"
                 required
@@ -486,12 +491,13 @@ const ApprovementForm2 = ({
         >
           กลับ
         </Link>
-        <Link
+        <ApprovementConfirmButton />
+        {/* <Link
           href="/approvement/approve/success"
           className="btn btn-success rounded-full text-white shadow-xl"
         >
           ยืนยันการประเมิณ
-        </Link>
+        </Link> */}
       </div>
     </form>
   );

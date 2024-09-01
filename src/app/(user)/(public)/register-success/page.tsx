@@ -6,7 +6,7 @@ const Page = async ({ searchParams }: { searchParams: { id: string } }) => {
   const { id } = searchParams;
   const user = await getUserById(id);
   return (
-    <div className="flex h-screen items-center justify-center">
+    <div className="flex h-screen items-center justify-center md:items-start">
       <div className="grid grid-cols-1 place-items-center gap-2">
         <figure className="max-w-64">
           <Image src="/images/logo.png" width={1000} height={1000} alt="logo" />
@@ -17,7 +17,7 @@ const Page = async ({ searchParams }: { searchParams: { id: string } }) => {
           </div>
           <div className="text-sm">กรุณาเข้าสู่ระบบเพื่อเริ่มรายการ</div>
         </div>
-        <Link href="/login" className="btn btn-secondary">
+        <Link href="/login" className="btn btn-secondary md:my-10">
           เข้าสู่ระบบ
         </Link>
       </div>

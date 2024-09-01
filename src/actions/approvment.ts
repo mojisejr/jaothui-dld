@@ -1,9 +1,20 @@
 "use server";
+import { type ApprovementInfo, type RawRegisterData } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { memberApprovementParser } from "~/lib/parser";
 import { db } from "~/server/db";
 
-export const getApprovementInfoOf = async (id: string) => {
+export const getApprovementInfoOf = async (userId: string) => {
+  const found = await db.rawRegisterData.findFirst({
+    where: { userId },
+    include: { MemberApprovement: true },
+  });
+
+  return found;
+};
+
+export const getApprovementInfo = async (id: string) => {
   const found = await db.rawRegisterData.findFirst({
     where: { id },
     include: { MemberApprovement: true },
@@ -19,8 +30,6 @@ export const getWaitForApprovementListForProvinceAdmin = async (
     where: { province },
     include: { MemberApprovement: true },
   });
-
-  console.log(found);
 
   const onlyWaitForApprovement = found.filter(
     (data) => data.appointment == null,
@@ -47,7 +56,9 @@ export const getAppointedListForProvinceAdmin = async (province: string) => {
   });
 
   const onlyAppointedApprovement = found.filter(
-    (data) => data.appointment != null,
+    (data) =>
+      data.appointment != null &&
+      data.MemberApprovement?.managementApproved == null,
   );
 
   return onlyAppointedApprovement;
@@ -59,7 +70,9 @@ export const getAppointedListForAll = async () => {
   });
 
   const onlyAppointedApprovement = found.filter(
-    (data) => data.appointment != null,
+    (data) =>
+      data.appointment != null &&
+      data.MemberApprovement?.managementApproved == null,
   );
 
   return onlyAppointedApprovement;
@@ -83,13 +96,157 @@ export const confirmAppointmemt = async (id: string, formData: FormData) => {
 export const getRequestCount = async (level: string, province: string) => {
   if (level == "1") {
     const count = await db.rawRegisterData.count({
-      where: { MemberApprovement: null, province },
+      where: { MemberApprovement: { managementApproved: null }, province },
     });
     return count;
   } else {
     const count = await db.rawRegisterData.count({
-      where: { MemberApprovement: null },
+      where: { MemberApprovement: { managementApproved: null } },
     });
     return count;
   }
+};
+
+export const getCompletedCount = async (level: string, province: string) => {
+  if (level == "1") {
+    const count = await db.rawRegisterData.count({
+      where: {
+        MemberApprovement: { managementApproved: { not: null } },
+        province,
+      },
+    });
+    return count;
+  } else {
+    const count = await db.rawRegisterData.count({
+      where: { MemberApprovement: { managementApproved: { not: null } } },
+    });
+    return count;
+  }
+};
+
+export const handleSubmitApprovementInfo = async (
+  registerId: string,
+  adminId: string,
+  formData: FormData,
+) => {
+  const parsedData = await memberApprovementParser(
+    formData,
+    registerId,
+    adminId,
+  );
+
+  try {
+    await db.approvementInfo.create({
+      data: parsedData,
+    });
+  } catch (error) {
+    throw new Error("แก้ไขข้อมูลผิดพลาด");
+  }
+
+  revalidatePath("/", "layout");
+  redirect(`/approvement/success?type=approved&id=${registerId}`);
+};
+
+export const handleSubmitApprovment = async (
+  adminId: string,
+  info: RawRegisterData & {
+    MemberApprovement: ApprovementInfo;
+  },
+) => {
+  const user = await db.user.findUnique({
+    where: { id: adminId },
+    include: { AdminPosition: true },
+  });
+
+  const approver = info.MemberApprovement.provinceApproved.filter(
+    (a) =>
+      (JSON.parse(a) as { adminId: string; name: string }).adminId == adminId,
+  );
+
+  if (approver.length > 0)
+    throw Error(`คุณ ${user?.firstname} ได้อนุมติไปแล้ว`);
+
+  if (user?.AdminPosition?.level == "1") {
+    if (info.MemberApprovement.provinceApproved.length == 3)
+      throw Error(
+        "เจ้าหน้าที่ระดับจังหวัดอนุมัติครบสามคนแล้ว โปรดรอเจ้าหน้าที่ระดับสูงอนุมัติต่อไป",
+      );
+
+    await db.approvementInfo.update({
+      where: { id: info.MemberApprovement.id },
+      data: {
+        provinceApproved: {
+          push: JSON.stringify({
+            adminId,
+            name: `${user.firstname} ${user.lastname}`,
+          }),
+        },
+      },
+    });
+  }
+
+  //Central
+  if (user?.AdminPosition?.level == "2") {
+    if (info.MemberApprovement.provinceApproved.length < 3)
+      throw Error("เจ้าหน้าที่ระดับจังหวัด ยังอนุมัติไม่ครบ");
+    if (info.MemberApprovement.centralApproved != null)
+      throw Error("เจ้าหน้าที่ส่วนกลางอนุมัติเรียบร้อยแล้ว");
+    await db.approvementInfo.update({
+      where: { id: info.MemberApprovement.id },
+      data: {
+        centralApproved: JSON.stringify({
+          adminId,
+          name: `${user.firstname} ${user.lastname}`,
+        }),
+      },
+    });
+  }
+
+  //Management
+  if (user?.AdminPosition?.level == "3") {
+    if (
+      info.MemberApprovement.provinceApproved.length < 3 ||
+      info.MemberApprovement.centralApproved == null
+    )
+      throw Error("เจ้าหน้าที่ระดับล่างยังอนุมัติไม่ครบ");
+    if (info.MemberApprovement.managementApproved != null)
+      throw Error("เจ้าหน้าที่ทุกส่วนได้ทำการอนุมัติเรียบร้อยแล้ว");
+    await db.approvementInfo.update({
+      where: { id: info.MemberApprovement.id },
+      data: {
+        managementApproved: JSON.stringify({
+          adminId,
+          name: `${user.firstname} ${user.lastname}`,
+        }),
+      },
+    });
+  }
+
+  revalidatePath("/", "layout");
+  redirect(`/approvement/success?type=accept&userId=${adminId}&id=${info.id}`);
+};
+
+export const getCompletedListOf = async (province: string) => {
+  const found = await db.rawRegisterData.findMany({
+    where: { province },
+    include: { MemberApprovement: true },
+  });
+
+  const filtered = found.filter(
+    (d) => d.MemberApprovement?.managementApproved != null,
+  );
+
+  return filtered;
+};
+
+export const getCompletedListAll = async () => {
+  const found = await db.rawRegisterData.findMany({
+    include: { MemberApprovement: true },
+  });
+
+  const filtered = found.filter(
+    (d) => d.MemberApprovement?.managementApproved != null,
+  );
+
+  return filtered;
 };

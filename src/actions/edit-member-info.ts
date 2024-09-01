@@ -10,7 +10,11 @@ export const handleConfirmEdit = async (
   info: RawRegisterData,
   formData: FormData,
 ) => {
-  // console.log("handle edit function: ", formData);
+  const province = formData.get("province") == undefined ? false : true;
+  const farmProvince = formData.get("farmProvince") == undefined ? false : true;
+
+  if (!province || farmProvince) throw Error("กรุณากรอกข้อมูลจังหวัดอีกครั้ง");
+
   const parsedData = await formUpdateDataParser(formData, info);
 
   try {
@@ -23,5 +27,5 @@ export const handleConfirmEdit = async (
   }
 
   revalidatePath("/", "layout");
-  redirect("/new-member-success");
+  redirect(`/approvement/success?type=edit&id=${info.id}`);
 };

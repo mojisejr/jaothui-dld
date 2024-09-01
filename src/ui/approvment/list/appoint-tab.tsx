@@ -1,10 +1,10 @@
 import Link from "next/link";
 import React from "react";
 import dayjs from "dayjs";
-import { type RawRegisterData } from "@prisma/client";
+import { RawRegisterDataWithMemberApprovement } from "~/interfaces/raw-register-data";
 
 interface AppointTabProps {
-  appointedList: RawRegisterData[];
+  appointedList: RawRegisterDataWithMemberApprovement[];
 }
 
 const AppointTab = ({ appointedList }: AppointTabProps) => {
@@ -30,10 +30,16 @@ const AppointTab = ({ appointedList }: AppointTabProps) => {
                   คลิก
                 </Link>
               </div>
-              <div className="w-full text-center font-bold text-error">
-                นัดวันประเมิน{" "}
-                {dayjs(data.appointment?.toISOString()).format("DD/MM/YYYY")}
-              </div>
+              {data.MemberApprovement == null ? (
+                <div className="w-full text-center font-bold text-error">
+                  นัดวันประเมิน{" "}
+                  {dayjs(data.appointment?.toISOString()).format("DD/MM/YYYY")}
+                </div>
+              ) : (
+                <div className="w-full text-center font-bold text-error">
+                  ประเมินเรียบร้อยแล้วรออนุมัติ
+                </div>
+              )}
             </div>
           ))}
         </>

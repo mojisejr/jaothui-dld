@@ -80,3 +80,25 @@ export const updateIdCardImage = async (idCard: File, userId: string) => {
     console.log("upload error: ", error);
   }
 };
+
+export const uploadApproveImage = async (
+  file: File,
+  registerId: string,
+  adminId: string,
+  folder: string,
+) => {
+  const extension = file.name.split(".")[1];
+  const supabase = createClient();
+
+  try {
+    const result = await supabase.storage
+      .from("dev")
+      .upload(`${folder}/${registerId}_${adminId}.${extension}`, file);
+    console.log(result);
+    if (result.error == null) {
+      return `${baseUrl}${result.data.fullPath}`;
+    }
+  } catch (error) {
+    console.log("upload error: ", error);
+  }
+};

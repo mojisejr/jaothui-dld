@@ -1,7 +1,8 @@
-import { type RawRegisterData } from "@prisma/client";
+import { ApprovementInfo, type RawRegisterData } from "@prisma/client";
 import {
   updateFarmImage,
   updateIdCardImage,
+  uploadApproveImage,
   uploadFarmImage,
   uploadIdCardImage,
 } from "~/actions/upload";
@@ -178,4 +179,130 @@ export const formUpdateDataParser = async (
     accept: formData.get("radioAccept")?.toString() ?? "N/A",
   };
   return rawFormData;
+};
+
+export const memberApprovementParser = async (
+  formData: FormData,
+  registerId: string,
+  adminId: string,
+) => {
+  //uploading zone
+  const grassImage1 = await uploadApproveImage(
+    formData.get("grassImage1") as File,
+    registerId,
+    adminId,
+    "grass",
+  );
+
+  const grassImage2 = await uploadApproveImage(
+    formData.get("grassImage2") as File,
+    registerId,
+    adminId,
+    "grass",
+  );
+
+  const grassImage3 = await uploadApproveImage(
+    formData.get("grassImage3") as File,
+    registerId,
+    adminId,
+    "grass",
+  );
+
+  const waterImage1 = await uploadApproveImage(
+    formData.get("waterImage1") as File,
+    registerId,
+    adminId,
+    "water",
+  );
+
+  const waterImage2 = await uploadApproveImage(
+    formData.get("waterImage2") as File,
+    registerId,
+    adminId,
+    "water",
+  );
+
+  const foodImage1 = await uploadApproveImage(
+    formData.get("foodImage1") as File,
+    registerId,
+    adminId,
+    "food",
+  );
+
+  const foodImage2 = await uploadApproveImage(
+    formData.get("foodImage2") as File,
+    registerId,
+    adminId,
+    "food",
+  );
+
+  const treatImage1 = await uploadApproveImage(
+    formData.get("treatImage1") as File,
+    registerId,
+    adminId,
+    "treat",
+  );
+
+  const treatImage2 = await uploadApproveImage(
+    formData.get("treatImage2") as File,
+    registerId,
+    adminId,
+    "treat",
+  );
+
+  const treatImage3 = await uploadApproveImage(
+    formData.get("treatImage3") as File,
+    registerId,
+    adminId,
+    "treat",
+  );
+
+  const wasteImage1 = await uploadApproveImage(
+    formData.get("wasteImage1") as File,
+    registerId,
+    adminId,
+    "waste",
+  );
+
+  const wasteImage2 = await uploadApproveImage(
+    formData.get("wasteImage2") as File,
+    registerId,
+    adminId,
+    "waste",
+  );
+
+  const parsedData = {
+    grassImage1: grassImage1 ?? "N/A",
+    grassImage2: grassImage2 ?? "N/A",
+    grassImage3: grassImage3 ?? "N/A",
+    feedingBowl: formData.get("feedingBowl") as string,
+    feedingBowlOther: formData.get("feedingBowlOther") as string,
+    greenhouse: formData.get("greenhouse") as string,
+    greenhouseOther: formData.get("greenhouseOther") as string,
+    waterBowl: formData.get("waterBowl") as string,
+    waterBowlOther: formData.get("waterBowlOther") as string,
+    waterImage1: waterImage1 ?? "N/A",
+    waterImage2: waterImage2 ?? "N/A",
+    foodImage1: foodImage1 ?? "N/A",
+    foodImage2: foodImage2 ?? "N/A",
+    treatImage1: treatImage1 ?? "N/A",
+    treatImage2: treatImage2 ?? "N/A",
+    treatImage3: treatImage3 ?? "N/A",
+    wasteImage1: wasteImage1 ?? "N/A",
+    wasteImage2: wasteImage2 ?? "N/A",
+    tag: formData.get("tag") as string,
+    certificate: formData.get("certificate") as string,
+    product: formData.get("product") as string,
+    health: formData.get("health") as string,
+    foodManagement: formData.get("foodManagement") as string,
+    market: formData.get("market") as string,
+    result: formData.get("result") as string,
+    note: formData.get("note") as string,
+    rawRegisterDataId: registerId,
+    provinceApproved: [],
+    centralApproved: null,
+    managementApproved: null,
+  };
+
+  return parsedData;
 };

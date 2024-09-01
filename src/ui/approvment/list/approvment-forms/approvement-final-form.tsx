@@ -1,57 +1,66 @@
-import Link from "next/link";
 import React from "react";
-import { confirmAppointmemt, getApprovementInfoOf } from "~/actions/approvment";
-import dayjs from "dayjs";
-import Image from "next/image";
-import SubmitAppointment from "./submit-appointment-btn";
 
-interface RequestFormProps {
-  requestId: string;
+import Image from "next/image";
+import { ApprovementInfo, type RawRegisterData } from "@prisma/client";
+import ApprovmentSubmitButton from "./approvement-final-submit-button";
+import { handleSubmitApprovment } from "~/actions/approvment";
+import Link from "next/link";
+
+interface ApprovementFinalFormProps {
+  approvementInfo: RawRegisterData;
   adminId: string;
   level: string;
 }
 
-const RequestForm = async ({ requestId, adminId, level }: RequestFormProps) => {
-  const confirmAppointmentWithMetadata = confirmAppointmemt.bind(
-    null,
-    requestId,
-  );
-  const info = await getApprovementInfoOf(requestId);
+const ApprovementFinalForm = ({
+  approvementInfo,
+  adminId,
+  level,
+}: ApprovementFinalFormProps) => {
+  const info = approvementInfo as RawRegisterData & {
+    MemberApprovement: ApprovementInfo;
+  };
+
+  const confirmApprovment = handleSubmitApprovment.bind(null, adminId, info);
+
   return (
-    <form
-      action={confirmAppointmentWithMetadata}
-      className="grid max-w-md grid-cols-1 gap-2"
-    >
-      <div className="grid grid-cols-2 gap-2">
-        <div className="form-control">
+    <form action={confirmApprovment} className="grid grid-cols-1 gap-2">
+      <div className="rounded-xl bg-info p-2 font-bold">
+        ผู้สมัครได้รับการตรวจฟาร์มเรียบร้อยแล้ว เจ้าหน้าที่สามารถลงนามอนุมัติได้
+      </div>
+      <div className="form-control">
+        <div className="flex justify-between gap-2">
           <input
             type="text"
             name="firstName"
-            className="input input-sm input-bordered"
+            className={`input input-sm input-bordered w-full`}
             placeholder="ชื่อ"
             value={info?.firstname}
             readOnly
-          ></input>
-        </div>
-        <div className="form-control">
-          <input
-            type="text"
-            name="lastName"
-            className="input input-sm input-bordered"
-            placeholder="นามสกุล"
-            value={info?.lastname}
-            readOnly
+            required
           ></input>
         </div>
       </div>
       <div className="form-control">
         <input
           type="text"
-          name="tel"
-          className="input input-sm input-bordered"
-          placeholder="เบอร์โทรศัพท์"
+          name="lastName"
+          className={`input input-sm input-bordered w-full`}
+          placeholder={info?.lastname}
+          value={info?.lastname}
           readOnly
+          required
+        ></input>
+      </div>
+      <div className="form-control">
+        <input
+          type="text"
+          name="tel"
+          className={`input input-sm input-bordered w-full`}
+          placeholder={info?.tel}
           value={info?.tel}
+          readOnly
+          required
         ></input>
       </div>
       <div className="form-control">
@@ -61,10 +70,11 @@ const RequestForm = async ({ requestId, adminId, level }: RequestFormProps) => {
         <input
           type="number"
           name="idCard"
-          className="input input-sm input-bordered"
-          placeholder="เลขบัตรประชาชน (ไม่ต้องเติมขีด)"
+          className={`input input-sm input-bordered w-full`}
+          placeholder={info?.idCard.toString()}
           value={info?.idCard.toString()}
           readOnly
+          required
         ></input>
       </div>
       <div className="form-group">
@@ -76,33 +86,36 @@ const RequestForm = async ({ requestId, adminId, level }: RequestFormProps) => {
             <input
               type="text"
               name="address1"
-              className="input input-sm input-bordered"
-              placeholder="บ้านเลขที่"
+              className={`input input-sm input-bordered w-full`}
+              placeholder={info?.address1}
               value={info?.address1}
               readOnly
+              required
             ></input>
           </div>
           <div className="form-control">
             <input
               name="province"
-              className="select select-bordered select-sm"
+              className={`select select-bordered select-sm`}
               value={info?.province}
               readOnly
+              required
             />
           </div>
           <div className="form-control">
             <input
               name="amphoe"
-              className="select select-bordered select-sm"
+              className={`select select-bordered select-sm`}
               value={info?.amphoe}
               readOnly
+              required
             ></input>
           </div>
           <div className="form-control">
             <input
               type="text"
               name="district"
-              className="select select-bordered select-sm"
+              className={`select select-bordered select-sm`}
               value={info?.district}
               readOnly
             ></input>
@@ -111,7 +124,7 @@ const RequestForm = async ({ requestId, adminId, level }: RequestFormProps) => {
             <input
               type="number"
               name="zipcode"
-              className="input input-sm input-bordered"
+              className={`input input-sm input-bordered w-full`}
               placeholder="รหัสไปรษณี"
               readOnly
               value={info?.zipcode}
@@ -126,7 +139,7 @@ const RequestForm = async ({ requestId, adminId, level }: RequestFormProps) => {
             <input
               type="text"
               name="farmName"
-              className="input input-sm input-bordered"
+              className={`input input-sm input-bordered w-full`}
               placeholder="ชื่อฟาร์ม"
               readOnly
               value={info?.farmName}
@@ -136,7 +149,7 @@ const RequestForm = async ({ requestId, adminId, level }: RequestFormProps) => {
             <input
               type="text"
               name="farmLogo"
-              className="input input-sm input-bordered"
+              className={`input input-sm input-bordered w-full`}
               placeholder="เครื่องหมายฟาร์ม"
               readOnly
               value={info?.farmLogo}
@@ -146,7 +159,7 @@ const RequestForm = async ({ requestId, adminId, level }: RequestFormProps) => {
             <input
               type="text"
               name="farmAddress1"
-              className="input input-sm input-bordered"
+              className={`input input-sm input-bordered w-full`}
               placeholder="ที่ตั้งฟาร์มเลขที่"
               readOnly
               value={info?.farmAddress}
@@ -155,7 +168,7 @@ const RequestForm = async ({ requestId, adminId, level }: RequestFormProps) => {
           <div className="form-control">
             <input
               name="farmProvince"
-              className="select select-bordered select-sm"
+              className={`select select-bordered select-sm`}
               readOnly
               value={info?.farmProvince}
             ></input>
@@ -163,7 +176,7 @@ const RequestForm = async ({ requestId, adminId, level }: RequestFormProps) => {
           <div className="form-control">
             <input
               name="farmAmphoe"
-              className="select select-bordered select-sm"
+              className={`select select-bordered select-sm`}
               readOnly
               value={info?.farmAmphoe}
             ></input>
@@ -171,7 +184,7 @@ const RequestForm = async ({ requestId, adminId, level }: RequestFormProps) => {
           <div className="form-control">
             <input
               name="farmDistrict"
-              className="select select-bordered select-sm"
+              className={`select select-bordered select-sm`}
               readOnly
               value={info?.farmDistrict}
             ></input>
@@ -180,7 +193,7 @@ const RequestForm = async ({ requestId, adminId, level }: RequestFormProps) => {
             <input
               type="number"
               name="farmZipCode"
-              className="input input-sm input-bordered"
+              className={`input input-sm input-bordered w-full`}
               placeholder="รหัสไปรษณี"
               readOnly
               value={info?.farmZipcode.toString()}
@@ -196,7 +209,7 @@ const RequestForm = async ({ requestId, adminId, level }: RequestFormProps) => {
               type="number"
               name="farmSize1"
               placeholder="จำนวนไร่"
-              className="input input-sm input-bordered"
+              className={`input input-sm input-bordered w-full`}
               readOnly
               value={info?.farmSize1}
             ></input>
@@ -206,7 +219,7 @@ const RequestForm = async ({ requestId, adminId, level }: RequestFormProps) => {
               type="number"
               name="farmSize2"
               placeholder="จำนวนงาน"
-              className="input input-sm input-bordered"
+              className={`input input-sm input-bordered w-full`}
               readOnly
               value={info?.farmSize2}
             ></input>
@@ -216,7 +229,7 @@ const RequestForm = async ({ requestId, adminId, level }: RequestFormProps) => {
               type="number"
               name="farmSize3"
               placeholder="จำนวนตารางวา"
-              className="input input-sm input-bordered"
+              className={`input input-sm input-bordered w-full`}
               readOnly
               value={info?.farmSize3}
             ></input>
@@ -232,7 +245,7 @@ const RequestForm = async ({ requestId, adminId, level }: RequestFormProps) => {
             <input
               defaultValue="โคเนื้อ"
               name="animalType"
-              className="select select-bordered select-sm"
+              className={`select select-bordered select-sm`}
               readOnly
               value={info?.animalType}
             ></input>
@@ -242,7 +255,7 @@ const RequestForm = async ({ requestId, adminId, level }: RequestFormProps) => {
               type="text"
               name="animalTypeOther"
               placeholder="อื่นๆ ระบุ"
-              className="input input-sm input-bordered"
+              className={`input input-sm input-bordered w-full`}
               readOnly
               value={info?.animalTypeOther?.toString()}
             ></input>
@@ -259,7 +272,7 @@ const RequestForm = async ({ requestId, adminId, level }: RequestFormProps) => {
               type="number"
               name="momCount"
               placeholder="จำนวนแม่พันธุ์"
-              className="input input-sm input-bordered"
+              className={`input input-sm input-bordered w-full`}
               readOnly
               value={info?.momCount}
             ></input>
@@ -269,7 +282,7 @@ const RequestForm = async ({ requestId, adminId, level }: RequestFormProps) => {
               type="text"
               name="momBreed"
               placeholder="สายพันธุ์"
-              className="input input-sm input-bordered"
+              className={`input input-sm input-bordered w-full`}
               readOnly
               value={info?.momBreed}
             ></input>
@@ -279,7 +292,7 @@ const RequestForm = async ({ requestId, adminId, level }: RequestFormProps) => {
               type="number"
               name="dadCount"
               placeholder="จำนวนพ่อพันธุ์"
-              className="input input-sm input-bordered"
+              className={`input input-sm input-bordered w-full`}
               readOnly
               value={info?.dadCount}
             ></input>
@@ -289,7 +302,7 @@ const RequestForm = async ({ requestId, adminId, level }: RequestFormProps) => {
               type="text"
               name="dadBreed"
               placeholder="สายพันธุ์"
-              className="input input-sm input-bordered"
+              className={`input input-sm input-bordered w-full`}
               readOnly
               value={info?.dadBreed}
             ></input>
@@ -299,7 +312,7 @@ const RequestForm = async ({ requestId, adminId, level }: RequestFormProps) => {
               type="text"
               name="otherAnimalSize"
               placeholder="ขนาดอื่นๆ"
-              className="input input-sm input-bordered"
+              className={`input input-sm input-bordered w-full`}
               readOnly
               value={info?.dadCount}
             ></input>
@@ -309,7 +322,7 @@ const RequestForm = async ({ requestId, adminId, level }: RequestFormProps) => {
               type="number"
               name="children"
               placeholder="ลูก"
-              className="input input-sm input-bordered"
+              className={`input input-sm input-bordered w-full`}
               readOnly
               value={info?.children}
             ></input>
@@ -319,7 +332,7 @@ const RequestForm = async ({ requestId, adminId, level }: RequestFormProps) => {
               type="number"
               name="totalAnimalInFarm"
               placeholder="จำนวนรวมทั้งสิ้น"
-              className="input input-sm input-bordered"
+              className={`input input-sm input-bordered w-full`}
               readOnly
               value={info?.totalAnimalInFarm}
             ></input>
@@ -384,7 +397,7 @@ const RequestForm = async ({ requestId, adminId, level }: RequestFormProps) => {
         </div>
         <div className="form-control">
           <input
-            className="input input-sm input-bordered"
+            className={`input input-sm input-bordered w-full`}
             name="farmObjOther"
             type="text"
             placeholder="อื่นๆ ระบุ"
@@ -463,6 +476,7 @@ const RequestForm = async ({ requestId, adminId, level }: RequestFormProps) => {
                 readOnly
                 checked={info?.water == "น้ำบ่อ"}
               />
+
               <span className="label-text">น้ำบ่อ</span>
             </label>
           </div>
@@ -476,18 +490,18 @@ const RequestForm = async ({ requestId, adminId, level }: RequestFormProps) => {
                 checked={info?.water == "น้ำตลอง/แม่น้ำ"}
                 readOnly
               />
+
               <span className="label-text">น้ำคลอง/แม่น้ำ</span>
             </label>
           </div>
         </div>
         <div className="form-control">
           <input
-            className="input input-sm input-bordered"
+            className={`input input-sm input-bordered w-full`}
             name="radioWaterOther"
             type="text"
             placeholder="อื่นๆ ระบุ"
             readOnly
-            checked={info?.water == "อื่นๆ ระบุ"}
           ></input>
         </div>
       </div>
@@ -504,6 +518,7 @@ const RequestForm = async ({ requestId, adminId, level }: RequestFormProps) => {
                 readOnly
                 checked={info?.food == "อาหารธรรมชาติ"}
               />
+
               <span className="label-text">อาหารธรรมชาติ</span>
             </label>
           </div>
@@ -517,13 +532,14 @@ const RequestForm = async ({ requestId, adminId, level }: RequestFormProps) => {
                 readOnly
                 checked={info?.food == "อาหารสำเร็จรูป"}
               />
+
               <span className="label-text">อาหารสำเร็จรูป</span>
             </label>
           </div>
         </div>
         <div className="form-control">
           <input
-            className="input input-sm input-bordered"
+            className={`input input-sm input-bordered w-full`}
             name="radioFoodOther"
             type="text"
             placeholder="อื่นๆ ระบุ"
@@ -545,6 +561,7 @@ const RequestForm = async ({ requestId, adminId, level }: RequestFormProps) => {
                 readOnly
                 checked={info?.treat == "ปล่อยแทะเล็ม"}
               />
+
               <span className="label-text">ปล่อยแทะเล็ม</span>
             </label>
           </div>
@@ -558,6 +575,7 @@ const RequestForm = async ({ requestId, adminId, level }: RequestFormProps) => {
                 readOnly
                 checked={info?.treat == "ขังคอก/ยืนโรง"}
               />
+
               <span className="label-text">ขังคอก/ยืนโรง</span>
             </label>
           </div>
@@ -571,13 +589,14 @@ const RequestForm = async ({ requestId, adminId, level }: RequestFormProps) => {
                 readOnly
                 checked={info?.treat == "กึ่งขังกึ่งปล่อย"}
               />
+
               <span className="label-text">กึ่งขังกึ่งปล่อย</span>
             </label>
           </div>
         </div>
         <div className="form-control">
           <input
-            className="input input-sm input-bordered"
+            className={`input input-sm input-bordered w-full`}
             name="radioTreatOther"
             type="text"
             placeholder="อื่นๆ ระบุ"
@@ -599,6 +618,7 @@ const RequestForm = async ({ requestId, adminId, level }: RequestFormProps) => {
                 readOnly
                 checked={info?.certificate == "มี"}
               />
+
               <span className="label-text">มี</span>
             </label>
           </div>
@@ -612,6 +632,7 @@ const RequestForm = async ({ requestId, adminId, level }: RequestFormProps) => {
                 readOnly
                 checked={info?.certificate == "ไม่มี"}
               />
+
               <span className="label-text">ไม่มี</span>
             </label>
           </div>
@@ -654,7 +675,7 @@ const RequestForm = async ({ requestId, adminId, level }: RequestFormProps) => {
           type="text"
           name="farmLocation"
           placeholder="เลือกจากแผนที่"
-          className="input input-sm input-bordered"
+          className={`input input-sm input-bordered w-full`}
           readOnly
           value={info?.farmLocation}
         />
@@ -666,7 +687,7 @@ const RequestForm = async ({ requestId, adminId, level }: RequestFormProps) => {
         <figure className="flex w-full justify-center">
           <Image
             className="max-w-64 rounded-xl"
-            src={info?.idCardImage ?? "/images/logo.png"}
+            src={info?.idCardImage}
             width={1000}
             height={760}
             alt="id-card-image"
@@ -680,7 +701,7 @@ const RequestForm = async ({ requestId, adminId, level }: RequestFormProps) => {
             <figure className="flex w-full justify-center">
               <Image
                 className="max-w-64 rounded-xl"
-                src={info?.farmImage1 ?? "/images/logo.png"}
+                src={info?.farmImage1}
                 width={1000}
                 height={760}
                 alt="id-card-image"
@@ -691,7 +712,7 @@ const RequestForm = async ({ requestId, adminId, level }: RequestFormProps) => {
             <figure className="flex w-full justify-center">
               <Image
                 className="max-w-64 rounded-xl"
-                src={info?.farmImage2 ?? "/images/logo.png"}
+                src={info?.farmImage2}
                 width={1000}
                 height={760}
                 alt="id-card-image"
@@ -702,7 +723,7 @@ const RequestForm = async ({ requestId, adminId, level }: RequestFormProps) => {
             <figure className="flex w-full justify-center">
               <Image
                 className="max-w-64 rounded-xl"
-                src={info?.farmImage3 ?? "/images/logo.png"}
+                src={info?.farmImage3}
                 width={1000}
                 height={760}
                 alt="id-card-image"
@@ -713,7 +734,7 @@ const RequestForm = async ({ requestId, adminId, level }: RequestFormProps) => {
             <figure className="flex w-full justify-center">
               <Image
                 className="max-w-64 rounded-xl"
-                src={info?.farmImage4 ?? "/images/logo.png"}
+                src={info?.farmImage4}
                 width={1000}
                 height={760}
                 alt="id-card-image"
@@ -736,9 +757,7 @@ const RequestForm = async ({ requestId, adminId, level }: RequestFormProps) => {
                 className="radio"
                 value="ใช้ประโยชน์พันธุกรรมและเทคโนโลยี"
                 readOnly
-                checked={
-                  info?.certificate == "ใช้ประโยชน์พันธุกรรมและเทคโนโลยี"
-                }
+                checked={info?.category == "ใช้ประโยชน์พันธุกรรมและเทคโนโลยี"}
               />
               <span className="label-text">
                 ใช้ประโยชน์พันธุกรรมและเทคโนโลยี
@@ -773,80 +792,92 @@ const RequestForm = async ({ requestId, adminId, level }: RequestFormProps) => {
           </div>
         </div>
       </div>
-      <div className="form-group">
-        <label className="label label-text">
-          ข้าพเจ้ายินยอมที่จะให้ข้อมูลฟาร์มของข้าพเจ้าแก่กรมปศุสัตว์
-        </label>
-        <div className="grid grid-cols-2 gap-2">
-          <div className="form-control">
-            <label className="label flex cursor-pointer justify-start gap-4">
-              <input
-                type="radio"
-                name="radioAccept"
-                className="radio"
-                value="y"
-                readOnly
-                checked={info?.accept == "y"}
-              />
-              <span className="label-accept">ยินยอม</span>
-            </label>
+      <div className="rounded-xl bg-slate-200 p-4">
+        <div>
+          <div className="font-bold">
+            เจ้าหน้าที่ระดับจังหวัด (
+            {info?.MemberApprovement.provinceApproved.length}/3)
           </div>
-          <div className="form-control">
-            <label className="label flex cursor-pointer justify-start gap-4">
-              <input
-                type="radio"
-                name="radioAccept"
-                className="radio"
-                value="n"
-                readOnly
-                checked={info?.accept == "n"}
-              />
-              <span className="label-accept">ไม่ยินยอม</span>
-            </label>
+          <ul className="flex flex-col p-1">
+            {info?.MemberApprovement.provinceApproved.length <= 0 ? (
+              <div>ยังไม่มีเจ้าหน้าที่อนุมัติ</div>
+            ) : (
+              <>
+                {info?.MemberApprovement.provinceApproved.map((d, index) => (
+                  <li key={index}>
+                    {index + 1}.{" "}
+                    {(JSON.parse(d) as { adminId: string; name: string }).name}
+                  </li>
+                ))}
+              </>
+            )}
+          </ul>
+        </div>
+        <div>
+          <div className="font-bold">
+            เจ้าหน้าที่ส่วนกลาง (
+            {info?.MemberApprovement.centralApproved ? 1 : 0}/1)
           </div>
+          <ul className="flex flex-col p-1">
+            {info?.MemberApprovement.centralApproved == null ? (
+              <div>ยังไม่มีเจ้าหน้าที่อนุมัติ</div>
+            ) : (
+              <div>
+                1.{" "}
+                {
+                  (
+                    JSON.parse(info?.MemberApprovement.centralApproved) as {
+                      adminId: string;
+                      name: string;
+                    }
+                  ).name
+                }
+              </div>
+            )}
+          </ul>
+        </div>
+        <div>
+          <div className="font-bold">
+            เจ้าหน้าที่ระดับบริหาร (
+            {info?.MemberApprovement.managementApproved ? 1 : 0}/1)
+          </div>
+          <ul className="flex flex-col p-1">
+            {info?.MemberApprovement.managementApproved == null ? (
+              <div>ยังไม่มีเจ้าหน้าที่อนุมัติ</div>
+            ) : (
+              <div>
+                1.{" "}
+                {
+                  (
+                    JSON.parse(info?.MemberApprovement.managementApproved) as {
+                      adminId: string;
+                      name: string;
+                    }
+                  ).name
+                }
+              </div>
+            )}
+          </ul>
         </div>
       </div>
-      {level == "1" && info?.appointment == null ? (
-        <>
-          <div className="form-control">
-            <label className="label label-text text-xl font-bold">
-              นัดวันเพื่อประเมินคำร้อง (จนท.ระดับจังหวัดระบุ)
-            </label>
-            <input
-              name="appointment"
-              type="date"
-              className="input input-bordered"
-              required
-            />
-          </div>
-          <SubmitAppointment />
-          <Link
-            className="btn btn-neutral rounded-full"
-            href="/approvement/list"
-          >
-            กลับ
-          </Link>
-        </>
-      ) : (
-        <>
-          <div className="text-erro w-full text-center font-bold">
-            นัดวันประเมิณ{" "}
-            {info?.appointment == null ? (
-              <span className="text-error">ยังไม่มีการนัด</span>
-            ) : (
-              dayjs(info?.appointment).format("DD/MM/YYYY")
-            )}
-          </div>
-          <Link
-            className="btn btn-secondary rounded-full"
-            href="/approvement/list"
-          >
-            กลับ
-          </Link>
-        </>
-      )}
+
+      <div className="flex w-full items-center justify-evenly">
+        {info?.MemberApprovement.managementApproved == null ? (
+          <ApprovmentSubmitButton />
+        ) : (
+          <span className="btn btn-success rounded-full text-white">
+            อนุมัดิเรียบร้อยแล้ว
+          </span>
+        )}
+        <Link
+          href="/approvement/list"
+          className="btn btn-neutral min-w-[200px] rounded-full"
+        >
+          กลับ
+        </Link>
+      </div>
     </form>
   );
 };
 
-export default RequestForm;
+export default ApprovementFinalForm;

@@ -1,9 +1,10 @@
 import { type RawRegisterData } from "@prisma/client";
 import Link from "next/link";
 import React from "react";
+import { RawRegisterDataWithMemberApprovement } from "~/interfaces/raw-register-data";
 
 interface RequestTabProps {
-  waitList: RawRegisterData[];
+  waitList: RawRegisterDataWithMemberApprovement[];
 }
 
 const RequestTab = ({ waitList }: RequestTabProps) => {
@@ -34,7 +35,7 @@ const RequestTab = ({ waitList }: RequestTabProps) => {
         <span>ไม่พบข้อมูล</span>
       )}
 
-      <Link href="/admin-profile" className="btn btn-secondary">
+      <Link href="/admin-profile" className="btn btn-secondary rounded-full">
         กลับหน้าหลัก
       </Link>
     </div>

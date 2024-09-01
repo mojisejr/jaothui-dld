@@ -3,15 +3,18 @@ import React, { useState } from "react";
 import RequestTab from "./request-tab";
 import AppointTab from "./appoint-tab";
 import { type RawRegisterData } from "@prisma/client";
+import { RawRegisterDataWithMemberApprovement } from "~/interfaces/raw-register-data";
 
 interface ApprovementContainerProps {
-  waitList: RawRegisterData[];
-  appointedList: RawRegisterData[];
+  waitList: RawRegisterDataWithMemberApprovement[];
+  appointedList: RawRegisterDataWithMemberApprovement[];
+  completedList: RawRegisterDataWithMemberApprovement[];
 }
 
 const ApprovementContainer = ({
   waitList,
   appointedList,
+  completedList,
 }: ApprovementContainerProps) => {
   const [tab, setTab] = useState<number>(0);
 
