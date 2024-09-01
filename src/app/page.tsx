@@ -4,7 +4,7 @@ import Link from "next/link";
 export default function HomePage() {
   return (
     <main className="min-h-screen w-full overflow-y-auto">
-      <div className="flex h-screen flex-col items-center justify-between gap-4 p-6">
+      <div className="flex h-screen flex-col items-center justify-between gap-4 p-6 md:justify-start">
         <div className="grid grid-cols-1 gap-10">
           <figure className="max-w-64">
             <Image
@@ -29,7 +29,7 @@ export default function HomePage() {
         </div>
         <Link
           href="/login"
-          className="btn btn-secondary btn-sm min-w-[200px] rounded-full"
+          className="btn btn-secondary btn-sm min-w-[200px] rounded-full md:my-10"
         >
           เข้าสู่ระบบ
         </Link>

@@ -1,8 +1,9 @@
 import { redirect } from "next/navigation";
 import React from "react";
 import { getAdminInfo } from "~/actions/admin";
-import { getApprovementInfoOf } from "~/actions/approvment";
+import { getApprovementInfo } from "~/actions/approvment";
 import { auth } from "~/auth";
+import ApprovementFinalForm from "~/ui/approvment/list/approvment-forms/approvement-final-form";
 import ApprovementForm1 from "~/ui/approvment/list/approvment-forms/approvement-form-1";
 import ApprovementForm2 from "~/ui/approvment/list/approvment-forms/approvement-form-2";
 
@@ -21,7 +22,7 @@ const Page = async ({
   if (!user) redirect("/login");
 
   const info = await getAdminInfo(user.id!);
-  const approvementInfo = await getApprovementInfoOf(params.id);
+  const approvementInfo = await getApprovementInfo(params.id);
 
   return (
     <>
@@ -31,27 +32,30 @@ const Page = async ({
           เครือข่ายสัตว์พันธุ์ดีกรมปศุสัตว์
         </h2>
       </div>
-      {step == 0 ? (
-        <ApprovementForm1
-          approvementInfo={approvementInfo!}
+      {approvementInfo?.MemberApprovement == null ? (
+        <>
+          {step == 0 && approvementInfo?.MemberApprovement == null ? (
+            <ApprovementForm1
+              approvementInfo={approvementInfo!}
+              adminId={user.id!}
+              level={info?.AdminPosition?.level ?? "0"}
+            />
+          ) : null}
+          {step == 1 && approvementInfo?.MemberApprovement == null ? (
+            <ApprovementForm2
+              approvementInfo={approvementInfo!}
+              adminId={user.id!}
+              level={info?.AdminPosition?.level ?? "0"}
+            />
+          ) : null}
+        </>
+      ) : (
+        <ApprovementFinalForm
+          approvementInfo={approvementInfo}
           adminId={user.id!}
           level={info?.AdminPosition?.level ?? "0"}
         />
-      ) : null}
-      {step == 1 ? (
-        <ApprovementForm2
-          approvementInfo={approvementInfo!}
-          adminId={user.id!}
-          level={info?.AdminPosition?.level ?? "0"}
-        />
-      ) : null}
-      {step == 2 ? (
-        <ApprovementForm2
-          approvementInfo={approvementInfo!}
-          adminId={user.id!}
-          level={info?.AdminPosition?.level ?? "0"}
-        />
-      ) : null}
+      )}
     </>
   );
 };

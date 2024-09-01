@@ -3,7 +3,7 @@ import Image from "next/image";
 
 const ProfileNavBar = () => {
   return (
-    <div className="flex items-center justify-evenly p-2">
+    <div className="flex items-center justify-evenly p-2 md:gap-10">
       <figure className="w-10">
         <Image src="/images/logo.png" width={1000} height={1000} alt="logo" />
       </figure>

@@ -6,7 +6,7 @@ interface LayoutProps {
 
 const Layout = ({ children }: LayoutProps) => {
   return (
-    <div className="flex h-screen flex-col gap-4 overflow-y-scroll p-4">
+    <div className="flex h-screen flex-col gap-4 overflow-y-scroll p-4 md:items-center">
       {children}
     </div>
   );

@@ -88,11 +88,11 @@ model ApprovementInfo {
   grassImage2        String
   grassImage3        String
   feedingBowl        String
-  feedingCount       Int
+  feedingBowlOther   String?
   greenhouse         String
-  greenhouseCount    Int
+  greenhouseOther    String?
   waterBowl          String
-  waterBowlCount     Int
+  waterBowlOther     String?
   waterImage1        String
   waterImage2        String
   foodImage1         String
@@ -100,8 +100,8 @@ model ApprovementInfo {
   treatImage1        String
   treatImage2        String
   treatImage3        String
-  wasteTreatImage1   String
-  wasteTreatImage2   String
+  wasteImage1        String
+  wasteImage2        String
   tag                String
   certificate        String
   product            String
@@ -112,6 +112,8 @@ model ApprovementInfo {
   note               String?
   data               RawRegisterData @relation(fields: [rawRegisterDataId], references: [id])
   rawRegisterDataId  String          @unique
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @updatedAt
 }
 
 model AdminPosition {
