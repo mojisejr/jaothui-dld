@@ -9,7 +9,14 @@ const SubmitAppointment = () => {
       type="submit"
       className="btn btn-secondary rounded-full shadow-xl"
     >
-      {pending ? "กำลังบันทึก..." : "ยืนยันการประเมิน"}
+      {pending ? (
+        <div className="flex items-center">
+          <div className="loading loading-spinner"></div>
+          กำลังบันทึก...
+        </div>
+      ) : (
+        "ยืนยันการประเมิน"
+      )}
     </button>
   );
 };

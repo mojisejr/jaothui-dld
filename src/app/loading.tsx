@@ -8,7 +8,9 @@ const Loading = () => {
           <Image src="/images/logo.png" width={1000} height={1000} alt="logo" />
         </figure>
         <div>
-          <div className="text-xl font-bold">กำลังโหลด..</div>
+          <div className="flex items-center text-xl font-bold">
+            <div className="loading loading-spinner"></div> กำลังโหลด..
+          </div>
         </div>
       </div>
     </div>

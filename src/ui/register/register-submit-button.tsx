@@ -10,7 +10,14 @@ const RegisterSubmitButton = () => {
       type="submit"
       className="btn btn-secondary btn-sm min-w-[200px] rounded-full"
     >
-      {pending ? "กำลังสร้างบัญชี" : "สร้างบัญชี"}
+      {pending ? (
+        <div className="flex items-center">
+          <div className="loading loading-spinner"></div>
+          กำลังสร้างบัญชี...
+        </div>
+      ) : (
+        "สร้างบัญชี"
+      )}
     </button>
   );
 };

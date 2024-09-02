@@ -19,7 +19,7 @@ const Error = ({
         <figure className="max-w-64">
           <Image src="/images/logo.png" width={1000} height={1000} alt="logo" />
         </figure>
-        <div className="text-xl font-bold">บันทึกข้อมูลไม่สำเร็จ</div>
+        <div className="text-xl font-bold">{error.message}</div>
         <button className="btn btn-error" onClick={reset}>
           ลองอีกครั้ง
         </button>

@@ -17,18 +17,18 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           const password = credentials.password as string | undefined;
 
           if (!username || !password)
-            throw new CredentialsSignin("username หรือ password ผิดพลาด");
+            throw new Error("username หรือ password ผิดพลาด");
 
           const user = await db.user.findUnique({
             where: { username: username },
           });
 
-          if (!user) throw new CredentialsSignin("ไม่พบข้อมูล");
+          if (!user) throw new Error("ไม่พบข้อมูล");
 
           const authorized = await verifyPassword(password, user.pwdHash);
 
           if (!authorized)
-            throw new CredentialsSignin(
+            throw new Error(
               "ไม่สามารถเช้าสู่ระบบได้ กรุณาตรวจสอบ username และ password",
             );
 
@@ -38,18 +38,15 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             role: `${user.roleHash}`,
           };
 
-          console.log("userData: ", userData);
           return userData;
         } catch (error) {
-          console.log("error: ", error);
-          return null;
+          throw new Error("ไม่สามารถเข้าสู่ระบบได้");
         }
       },
     }),
   ],
   pages: {
     signIn: "/login",
-    error: "/loing-error",
   },
   session: {
     strategy: "jwt",

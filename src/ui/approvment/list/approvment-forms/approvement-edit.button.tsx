@@ -9,7 +9,14 @@ const EditButton = () => {
       type="submit"
       className="btn btn-secondary rounded-full"
     >
-      {pending ? "กำลังบันทึกการแก้ไข" : "บันทึกการแก้ไข"}
+      {pending ? (
+        <div className="flex items-center">
+          <div className="loading loading-spinner"></div>
+          กำลังบันทึกการแก้ไข...
+        </div>
+      ) : (
+        "บันทึกการแก้ไข"
+      )}
     </button>
   );
 };
