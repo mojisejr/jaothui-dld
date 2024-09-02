@@ -20,6 +20,8 @@ export const getApprovementInfo = async (id: string) => {
     include: { MemberApprovement: true },
   });
 
+  console.log(found);
+
   return found;
 };
 
@@ -95,15 +97,26 @@ export const confirmAppointmemt = async (id: string, formData: FormData) => {
 
 export const getRequestCount = async (level: string, province: string) => {
   if (level == "1") {
-    const count = await db.rawRegisterData.count({
-      where: { MemberApprovement: { managementApproved: null }, province },
+    const found = await db.rawRegisterData.findMany({
+      where: { province },
+      include: { MemberApprovement: true },
     });
-    return count;
+
+    const filtered = found.filter(
+      (f) => f.MemberApprovement?.centralApproved == null,
+    );
+
+    return filtered.length;
   } else {
-    const count = await db.rawRegisterData.count({
-      where: { MemberApprovement: { managementApproved: null } },
+    const found = await db.rawRegisterData.findMany({
+      include: { MemberApprovement: true },
     });
-    return count;
+
+    const filtered = found.filter(
+      (f) => f.MemberApprovement?.centralApproved == null,
+    );
+
+    return filtered.length;
   }
 };
 

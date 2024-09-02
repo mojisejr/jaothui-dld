@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { auth } from "~/auth";
 import { getUserById } from "~/actions/user";
 import { logout } from "~/actions/logout";
-import { getApprovementInfo } from "~/actions/approvment";
+import { getApprovementInfoOf } from "~/actions/approvment";
 
 const Page = async () => {
   const session = await auth();
@@ -13,7 +13,7 @@ const Page = async () => {
   if (!user) redirect("/login");
 
   const info = await getUserById(user.id!);
-  const approvment = await getApprovementInfo(user.id!);
+  const approvment = await getApprovementInfoOf(user.id!);
 
   if (info?.roleHash === process.env.ADMIN) redirect("/admin-profile");
 
@@ -40,7 +40,7 @@ const Page = async () => {
             </figure>
             <p className="text-xl font-semibold">
               {approvment?.MemberApprovement == null ? (
-                <span className="text-error">รอเข้าประเมิณ</span>
+                <span className="text-error">รอเข้าประเมิน</span>
               ) : (
                 <>
                   {approvment.MemberApprovement.managementApproved == null ? (
