@@ -16,8 +16,7 @@ export const login = async (formData: FormData) => {
       redirect: false,
     });
   } catch (error) {
-    const loginError = error as CredentialsSignin;
-    return loginError;
+    throw new Error("ไม่สามารถเข้าสู่ระบบได้ กรุณาตรวจสอบข้อมูล");
   }
 
   revalidatePath("/login", "layout");

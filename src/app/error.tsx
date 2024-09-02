@@ -19,10 +19,10 @@ const Error = ({
         <figure className="max-w-64">
           <Image src="/images/logo.png" width={1000} height={1000} alt="logo" />
         </figure>
-        <div className="text-xl font-bold">
-          มีบางอย่างผิดพลาด : {error.message}
+        <div className="text-xl font-bold">{error.message}</div>
+        <div className="text-xs text-error">
+          กรุณาติดต่อผู้ดูแลระบบหากพบข้อผิดพลาดที่ไม่สามารถแก้ไขได้
         </div>
-        <div className="text-xs text-error">กรุณาติดต่อผู้ดูแลระบบ</div>
         <button className="btn btn-error" onClick={reset}>
           ลองอีกครั้ง
         </button>

@@ -2,14 +2,20 @@ import { useFormStatus } from "react-dom";
 
 const SubmitNewUser = () => {
   const { pending } = useFormStatus();
-  console.log(pending);
   return (
     <button
       type="submit"
       disabled={pending}
       className="btn btn-secondary rounded-full shadow-xl"
     >
-      {!pending ? <span>ยืนยันการลงทะเบียน</span> : <span>กำลังบันทึก...</span>}
+      {pending ? (
+        <div className="flex items-center">
+          <div className="loading loading-spinner"></div>
+          กำลังบันทึก...
+        </div>
+      ) : (
+        <span>ยืนยันการลงทะเบียน</span>
+      )}
     </button>
   );
 };

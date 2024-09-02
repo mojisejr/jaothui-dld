@@ -10,7 +10,14 @@ const LoginSubmitButton = () => {
       type="submit"
       className="btn btn-secondary btn-sm min-w-[200px] rounded-full"
     >
-      {pending ? "กำลังเข้้าสู่ระบบ" : "เข้าสู่ระบบ"}
+      {pending ? (
+        <div className="flex items-center">
+          <div className="loading loading-spinner"></div>
+          กำลังเข้าสู่ระบบ...
+        </div>
+      ) : (
+        "เข้าสู่ระบบ"
+      )}
     </button>
   );
 };
