@@ -1,10 +1,11 @@
-import React from "react";
-
+"use client";
+import React, { useEffect } from "react";
 import Image from "next/image";
 import { ApprovementInfo, type RawRegisterData } from "@prisma/client";
 import ApprovmentSubmitButton from "./approvement-final-submit-button";
 import { handleSubmitApprovment } from "~/actions/approvment";
 import Link from "next/link";
+import { useFormState } from "react-dom";
 
 interface ApprovementFinalFormProps {
   approvementInfo: RawRegisterData;
@@ -21,10 +22,23 @@ const ApprovementFinalForm = ({
     MemberApprovement: ApprovementInfo;
   };
 
-  const confirmApprovment = handleSubmitApprovment.bind(null, adminId, info);
+  // const confirmApprovment = handleSubmitApprovment.bind(null, adminId, info);
+
+  const [state, formAction] = useFormState(handleSubmitApprovment, {
+    message: "",
+  });
+
+  useEffect(() => {
+    if (state.message != "") {
+      alert(state.message);
+    }
+  }, [state]);
 
   return (
-    <form action={confirmApprovment} className="grid grid-cols-1 gap-2">
+    <form
+      action={() => formAction({ adminId, info })}
+      className="grid grid-cols-1 gap-2"
+    >
       <div className="rounded-xl bg-info p-2 font-bold">
         ผู้สมัครได้รับการตรวจฟาร์มเรียบร้อยแล้ว เจ้าหน้าที่สามารถลงนามอนุมัติได้
       </div>

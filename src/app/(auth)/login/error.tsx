@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Image from "next/image";
 
 const Error = ({
@@ -9,10 +9,8 @@ const Error = ({
   error: Error & { digest?: string };
   reset: () => void;
 }) => {
-  const [message, setMessage] = useState<string>();
   useEffect(() => {
     console.log(error);
-    setMessage(error.message);
   }, [error]);
 
   return (
@@ -21,7 +19,7 @@ const Error = ({
         <figure className="max-w-64">
           <Image src="/images/logo.png" width={1000} height={1000} alt="logo" />
         </figure>
-        <div className="text-xl font-bold">{message}</div>
+        <div className="text-xl font-bold">ไม่สามารถเข้าสู่ระบบได้</div>
         <button className="btn btn-error" onClick={reset}>
           ลองอีกครั้ง
         </button>

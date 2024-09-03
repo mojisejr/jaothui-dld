@@ -17,6 +17,8 @@ const Page = async ({
     title = "ยืนยันการประเมินเรียบร้อยแล้ว";
   } else if (type == "accept") {
     title = "อนุมัติเรียบร้อยแล้ว";
+  } else if (type == "appointed") {
+    title = "นัดหมายเรียบร้อยแล้ว";
   }
 
   const session = await auth();
@@ -33,9 +35,9 @@ const Page = async ({
         </figure>
         <div>
           <div className="text-xl font-bold">{title}</div>
-          <div className="text-sm">
+          {/* <div className="text-sm">
             {searchParams.userId ? searchParams.userId : null}
-          </div>
+          </div> */}
         </div>
         <Link
           href={`/approvement/approve/${id}?step=0`}

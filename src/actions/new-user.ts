@@ -5,11 +5,17 @@ import { db } from "~/server/db";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-export const createNewMember = async (formData: FormData) => {
+export const createNewMember = async (
+  prevState: { message?: string },
+  formData: FormData,
+) => {
   const password = formData.get("password") as string;
   const cfmPassword = formData.get("confirmPassword") as string;
 
-  if (password != cfmPassword) throw new Error("รหัสผ่านไม่ตรงกัน");
+  if (password != cfmPassword)
+    return {
+      message: "รหัสผ่านไม่ตรงกัน",
+    };
 
   const newUser: NewUserDTO = {
     firstname: formData.get("firstname") as string,
@@ -24,7 +30,9 @@ export const createNewMember = async (formData: FormData) => {
   });
 
   if (found) {
-    throw new Error("สมัครสมาชิกไปแล้ว");
+    return {
+      message: "สมัครสมาชิกไปแล้ว",
+    };
   }
   // console.log({ ...newUser, pwdHash: (await hashGen(password)) as string });
 
@@ -36,7 +44,9 @@ export const createNewMember = async (formData: FormData) => {
   });
 
   if (!result) {
-    throw new Error("ไม่สามารถสมัครสมาชิกได้");
+    return {
+      message: "ไม่สามารถสมัครสมาชิกได้",
+    };
   }
 
   revalidatePath("/register", "layout");

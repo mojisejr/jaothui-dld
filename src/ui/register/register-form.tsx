@@ -3,15 +3,21 @@ import Link from "next/link";
 import React from "react";
 import { createNewMember } from "~/actions/new-user";
 import RegisterSubmitButton from "./register-submit-button";
+import { useFormState } from "react-dom";
+
+const initialState = {
+  message: "",
+};
 
 const RegisterForm = () => {
+  const [state, formAction] = useFormState(createNewMember, initialState);
   return (
     <>
       <div className="grid w-full grid-cols-1 place-items-center">
         <h1 className="text-2xl font-semibold">สร้างบัญชี</h1>
       </div>
       <form
-        action={createNewMember}
+        action={formAction}
         className="grid w-full max-w-md grid-cols-1 gap-2"
       >
         <input
@@ -50,7 +56,12 @@ const RegisterForm = () => {
           placeholder="ยืนยันรหัสผ่าน 6 หลัก"
           required
         ></input>
-
+        <p
+          aria-live="polite"
+          className="text-center text-sm font-bold text-error"
+        >
+          {state?.message}
+        </p>
         <div className="flex w-full flex-col items-center justify-center py-2">
           <RegisterSubmitButton />
         </div>

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { createNewMemberInfo } from "~/actions/new-member";
 
 import {
@@ -9,13 +9,19 @@ import {
 } from "~/lib/address-helper";
 import SubmitNewUser from "./new-member-submit-button";
 import { logout } from "~/actions/logout";
+import { useFormState } from "react-dom";
 
 interface NewMemberFormProps {
   userId: string;
 }
 
+const initialState = {
+  message: "",
+};
+
 const NewMemberForm = ({ userId }: NewMemberFormProps) => {
-  const createNewMemberInfoWithUserId = createNewMemberInfo.bind(null, userId);
+  // const createNewMemberInfoWithUserId = createNewMemberInfo.bind(null, userId);
+  const [state, formAction] = useFormState(createNewMemberInfo, initialState);
 
   const [province, setProvince] = useState<string>();
   const [amphoe, setAmphoe] = useState<string>();
@@ -23,12 +29,16 @@ const NewMemberForm = ({ userId }: NewMemberFormProps) => {
   const [farmProvince, setFarmProvince] = useState<string>();
   const [farmAmphoe, setFarmAmphoe] = useState<string>();
 
+  useEffect(() => {
+    if (state.message != "") {
+      alert(state.message);
+    }
+  }, [state]);
+
   return (
-    <form
-      action={createNewMemberInfoWithUserId}
-      className="grid grid-cols-1 gap-2 md:max-w-md"
-    >
+    <form action={formAction} className="grid grid-cols-1 gap-2 md:max-w-md">
       <div className="grid grid-cols-2 gap-2">
+        <input type="text" name="userId" hidden value={userId} required></input>
         <div className="form-control">
           <input
             type="text"
@@ -793,6 +803,9 @@ const NewMemberForm = ({ userId }: NewMemberFormProps) => {
           </div>
         </div>
       </div>
+      <p aria-live="polite" className="text-sm font-bold text-error">
+        {state?.message}
+      </p>
       <SubmitNewUser />
       <button onClick={() => logout()} className="btn btn-ghost rounded-full">
         ออกจากระบบ

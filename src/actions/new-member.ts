@@ -5,15 +5,17 @@ import { redirect } from "next/navigation";
 import { formDataParser } from "~/lib/parser";
 
 export const createNewMemberInfo = async (
-  userId: string,
+  prevState: { message?: string },
   formData: FormData,
 ) => {
-  const parsedData = await formDataParser(formData, userId);
+  const parsedData = await formDataParser(formData);
 
-  try {
-    await db.rawRegisterData.create({ data: parsedData });
-  } catch (error) {
-    throw new Error("บันทึกข้อมูลผิดพลาด");
+  const result = await db.rawRegisterData.create({ data: parsedData });
+
+  if (!result) {
+    return {
+      message: "บันทึกข้อมูลไม่สำเร็จ",
+    };
   }
 
   revalidatePath("/", "layout");

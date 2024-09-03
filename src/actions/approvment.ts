@@ -20,8 +20,6 @@ export const getApprovementInfo = async (id: string) => {
     include: { MemberApprovement: true },
   });
 
-  console.log(found);
-
   return found;
 };
 
@@ -91,7 +89,7 @@ export const confirmAppointmemt = async (id: string, formData: FormData) => {
 
   if (result != null) {
     revalidatePath("/approvment/list", "layout");
-    redirect("/approvement/success");
+    redirect(`/approvement/success?type=appointed&id=${id}`);
   }
 };
 
@@ -138,10 +136,10 @@ export const getCompletedCount = async (level: string, province: string) => {
 };
 
 export const handleSubmitApprovementInfo = async (
-  registerId: string,
-  adminId: string,
-  formData: FormData,
+  prevState: { message?: string },
+  data: { registerId: string; adminId: string; formData: FormData },
 ) => {
+  const { registerId, adminId, formData } = data;
   const parsedData = await memberApprovementParser(
     formData,
     registerId,
@@ -153,7 +151,7 @@ export const handleSubmitApprovementInfo = async (
       data: parsedData,
     });
   } catch (error) {
-    throw new Error("แก้ไขข้อมูลผิดพลาด");
+    return { message: "ไม่สามารถเพิ่มข้อมูลการอนุมัติได้" };
   }
 
   revalidatePath("/", "layout");
@@ -161,36 +159,41 @@ export const handleSubmitApprovementInfo = async (
 };
 
 export const handleSubmitApprovment = async (
-  adminId: string,
-  info: RawRegisterData & {
-    MemberApprovement: ApprovementInfo;
+  prevState: { message?: string },
+  data: {
+    adminId: string;
+    info: RawRegisterData & {
+      MemberApprovement: ApprovementInfo;
+    };
   },
 ) => {
   const user = await db.user.findUnique({
-    where: { id: adminId },
+    where: { id: data.adminId },
     include: { AdminPosition: true },
   });
 
-  const approver = info.MemberApprovement.provinceApproved.filter(
+  const approver = data.info.MemberApprovement.provinceApproved.filter(
     (a) =>
-      (JSON.parse(a) as { adminId: string; name: string }).adminId == adminId,
+      (JSON.parse(a) as { adminId: string; name: string }).adminId ==
+      data.adminId,
   );
 
   if (approver.length > 0)
-    throw Error(`คุณ ${user?.firstname} ได้อนุมติไปแล้ว`);
+    return { message: `คุณ ${user?.firstname} ได้อนุมติไปแล้ว` };
 
   if (user?.AdminPosition?.level == "1") {
-    if (info.MemberApprovement.provinceApproved.length == 3)
-      throw Error(
-        "เจ้าหน้าที่ระดับจังหวัดอนุมัติครบสามคนแล้ว โปรดรอเจ้าหน้าที่ระดับสูงอนุมัติต่อไป",
-      );
+    if (data.info.MemberApprovement.provinceApproved.length == 3)
+      return {
+        message:
+          "เจ้าหน้าที่ระดับจังหวัดอนุมัติครบสามคนแล้ว โปรดรอเจ้าหน้าที่ระดับสูงอนุมัติต่อไป",
+      };
 
     await db.approvementInfo.update({
-      where: { id: info.MemberApprovement.id },
+      where: { id: data.info.MemberApprovement.id },
       data: {
         provinceApproved: {
           push: JSON.stringify({
-            adminId,
+            adminId: data.adminId,
             name: `${user.firstname} ${user.lastname}`,
           }),
         },
@@ -200,15 +203,15 @@ export const handleSubmitApprovment = async (
 
   //Central
   if (user?.AdminPosition?.level == "2") {
-    if (info.MemberApprovement.provinceApproved.length < 3)
-      throw Error("เจ้าหน้าที่ระดับจังหวัด ยังอนุมัติไม่ครบ");
-    if (info.MemberApprovement.centralApproved != null)
-      throw Error("เจ้าหน้าที่ส่วนกลางอนุมัติเรียบร้อยแล้ว");
+    if (data.info.MemberApprovement.provinceApproved.length < 3)
+      return { message: "เจ้าหน้าที่ระดับจังหวัด ยังอนุมัติไม่ครบ" };
+    if (data.info.MemberApprovement.centralApproved != null)
+      return { message: "เจ้าหน้าที่ส่วนกลางอนุมัติเรียบร้อยแล้ว" };
     await db.approvementInfo.update({
-      where: { id: info.MemberApprovement.id },
+      where: { id: data.info.MemberApprovement.id },
       data: {
         centralApproved: JSON.stringify({
-          adminId,
+          adminId: data.adminId,
           name: `${user.firstname} ${user.lastname}`,
         }),
       },
@@ -218,17 +221,17 @@ export const handleSubmitApprovment = async (
   //Management
   if (user?.AdminPosition?.level == "3") {
     if (
-      info.MemberApprovement.provinceApproved.length < 3 ||
-      info.MemberApprovement.centralApproved == null
+      data.info.MemberApprovement.provinceApproved.length < 3 ||
+      data.info.MemberApprovement.centralApproved == null
     )
-      throw Error("เจ้าหน้าที่ระดับล่างยังอนุมัติไม่ครบ");
-    if (info.MemberApprovement.managementApproved != null)
-      throw Error("เจ้าหน้าที่ทุกส่วนได้ทำการอนุมัติเรียบร้อยแล้ว");
+      return { message: "เจ้าหน้าที่ระดับล่างยังอนุมัติไม่ครบ" };
+    if (data.info.MemberApprovement.managementApproved != null)
+      return { message: "เจ้าหน้าที่ทุกส่วนได้ทำการอนุมัติเรียบร้อยแล้ว" };
     await db.approvementInfo.update({
-      where: { id: info.MemberApprovement.id },
+      where: { id: data.info.MemberApprovement.id },
       data: {
         managementApproved: JSON.stringify({
-          adminId,
+          adminId: data.adminId,
           name: `${user.firstname} ${user.lastname}`,
         }),
       },
@@ -236,7 +239,9 @@ export const handleSubmitApprovment = async (
   }
 
   revalidatePath("/", "layout");
-  redirect(`/approvement/success?type=accept&userId=${adminId}&id=${info.id}`);
+  redirect(
+    `/approvement/success?type=accept&userId=${data.adminId}&id=${data.info.id}`,
+  );
 };
 
 export const getCompletedListOf = async (province: string) => {

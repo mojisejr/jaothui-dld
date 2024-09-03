@@ -16,21 +16,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           const username = parseInt(credentials.username as string);
           const password = credentials.password as string | undefined;
 
-          if (!username || !password)
-            throw new Error("username หรือ password ผิดพลาด");
+          if (!username || !password) return null;
 
           const user = await db.user.findUnique({
             where: { username: username },
           });
 
-          if (!user) throw new Error("ไม่พบข้อมูล");
+          if (!user) return null;
 
           const authorized = await verifyPassword(password, user.pwdHash);
 
-          if (!authorized)
-            throw new Error(
-              "ไม่สามารถเช้าสู่ระบบได้ กรุณาตรวจสอบ username และ password",
-            );
+          if (!authorized) return null;
 
           const userData = {
             id: user.id,
@@ -40,7 +36,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
           return userData;
         } catch (error) {
-          throw new Error("ไม่สามารถเข้าสู่ระบบได้");
+          return null;
         }
       },
     }),

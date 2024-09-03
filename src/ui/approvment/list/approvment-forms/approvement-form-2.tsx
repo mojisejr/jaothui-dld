@@ -1,9 +1,10 @@
 "use client";
 import { type RawRegisterData } from "@prisma/client";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect } from "react";
 import { handleSubmitApprovementInfo } from "~/actions/approvment";
 import ApprovementConfirmButton from "./approvement-approve-button";
+import { useFormState } from "react-dom";
 
 interface ApprovementForm2Props {
   approvementInfo: RawRegisterData;
@@ -17,16 +18,28 @@ const ApprovementForm2 = ({
   level,
 }: ApprovementForm2Props) => {
   const info = approvementInfo;
-  const confirmApproveWithInfo = handleSubmitApprovementInfo.bind(
-    null,
-    info.id,
-    adminId,
-  );
+
+  const [state, formAction] = useFormState(handleSubmitApprovementInfo, {
+    message: "",
+  });
+
+  useEffect(() => {
+    if (state.message != "") {
+      alert(state.message);
+    }
+  }, [state]);
 
   return (
-    <form action={confirmApproveWithInfo} className="grid grid-cols-1 gap-2">
+    <form
+      action={(formData) =>
+        formAction({ registerId: info?.id, adminId, formData })
+      }
+      className="grid grid-cols-1 gap-2"
+    >
       <div className="form-group">
-        <label className="label label-text">แปลงหญ้าสำหรับสัตว์เลี้ยง</label>
+        <label className="label label-text font-bold">
+          แปลงหญ้าสำหรับสัตว์เลี้ยง
+        </label>
         <div className="grid grid-cols-1 gap-2">
           <div className="form-control">
             <input
@@ -58,7 +71,7 @@ const ApprovementForm2 = ({
         </div>
       </div>
       <div className="form-group">
-        <label className="label label-text">ภาชนะใส่อาหาร</label>
+        <label className="label label-text font-bold">ภาชนะใส่อาหาร</label>
         <div className="grid grid-cols-2 gap-2">
           <div className="form-control">
             <label className="label flex cursor-pointer justify-start gap-4">
@@ -95,7 +108,9 @@ const ApprovementForm2 = ({
         </div>
       </div>
       <div className="form-group">
-        <label className="label label-text">โรงเรือนเลี้ยงสัตว์</label>
+        <label className="label label-text font-bold">
+          โรงเรือนเลี้ยงสัตว์
+        </label>
         <div className="grid grid-cols-2 gap-2">
           <div className="form-control">
             <label className="label flex cursor-pointer justify-start gap-4">
@@ -132,7 +147,7 @@ const ApprovementForm2 = ({
         </div>
       </div>
       <div className="form-group">
-        <label className="label label-text">ภาชนะบรรจุน้ำ</label>
+        <label className="label label-text font-bold">ภาชนะบรรจุน้ำ</label>
         <div className="grid grid-cols-2 gap-2">
           <div className="form-control">
             <label className="label flex cursor-pointer justify-start gap-4">
@@ -169,7 +184,9 @@ const ApprovementForm2 = ({
         </div>
       </div>
       <div className="form-group">
-        <label className="label label-text">แหล่งน้ำที่ใช้เลี้ยงสัตว์</label>
+        <label className="label label-text font-bold">
+          แหล่งน้ำที่ใช้เลี้ยงสัตว์
+        </label>
         <div className="grid grid-cols-1 gap-2">
           <div className="form-control">
             <input
@@ -192,7 +209,9 @@ const ApprovementForm2 = ({
         </div>
       </div>
       <div className="form-group">
-        <label className="label label-text">อาหารที่ใช้เลี้ยงสัตว์</label>
+        <label className="label label-text font-bold">
+          อาหารที่ใช้เลี้ยงสัตว์
+        </label>
         <div className="grid grid-cols-1 gap-2">
           <div className="form-control">
             <input
@@ -215,7 +234,7 @@ const ApprovementForm2 = ({
         </div>
       </div>
       <div className="form-group">
-        <label className="label label-text">วิธีการเลี้ยง</label>
+        <label className="label label-text font-bold">วิธีการเลี้ยง</label>
         <div className="grid grid-cols-1 gap-2">
           <div className="form-control">
             <input
@@ -247,7 +266,9 @@ const ApprovementForm2 = ({
         </div>
       </div>
       <div className="form-group">
-        <label className="label label-text">แหล่งบำบัดของเสียจากฟาร์ม</label>
+        <label className="label label-text font-bold">
+          แหล่งบำบัดของเสียจากฟาร์ม
+        </label>
         <div className="grid grid-cols-1 gap-2">
           <div className="form-control">
             <input
@@ -270,7 +291,9 @@ const ApprovementForm2 = ({
         </div>
       </div>
       <div className="form-group">
-        <label className="label label-text">เครื่องหมายประจำตัวสัตว์</label>
+        <label className="label label-text font-bold">
+          เครื่องหมายประจำตัวสัตว์
+        </label>
         <div className="grid grid-cols-2 gap-2">
           <div className="form-control">
             <label className="label flex cursor-pointer justify-start gap-4">
@@ -299,7 +322,9 @@ const ApprovementForm2 = ({
         </div>
       </div>
       <div className="form-group">
-        <label className="label label-text">พันธุ์ประวัติ และการผสม</label>
+        <label className="label label-text font-bold">
+          พันธุ์ประวัติ และการผสม
+        </label>
         <div className="grid grid-cols-2 gap-2">
           <div className="form-control">
             <label className="label flex cursor-pointer justify-start gap-4">
@@ -328,7 +353,7 @@ const ApprovementForm2 = ({
         </div>
       </div>
       <div className="form-group">
-        <label className="label label-text">
+        <label className="label label-text font-bold">
           ผลผลิต (น้ำหนัก รอบอก การฟักไข่ อื่นๆ)
         </label>
         <div className="grid grid-cols-2 gap-2">
@@ -359,7 +384,7 @@ const ApprovementForm2 = ({
         </div>
       </div>
       <div className="form-group">
-        <label className="label label-text">
+        <label className="label label-text font-bold">
           สุขภาพสัตว์ การรักษาโรค การป้องกันควบคุมโรค
         </label>
         <div className="grid grid-cols-2 gap-2">
@@ -390,7 +415,9 @@ const ApprovementForm2 = ({
         </div>
       </div>
       <div className="form-group">
-        <label className="label label-text">การจัดการอาหารสัตว์</label>
+        <label className="label label-text font-bold">
+          การจัดการอาหารสัตว์
+        </label>
         <div className="grid grid-cols-2 gap-2">
           <div className="form-control">
             <label className="label flex cursor-pointer justify-start gap-4">
@@ -419,7 +446,9 @@ const ApprovementForm2 = ({
         </div>
       </div>
       <div className="form-group">
-        <label className="label label-text">การซื้อ/ขาย/ถ่าย/โอน สัตว์</label>
+        <label className="label label-text font-bold">
+          การซื้อ/ขาย/ถ่าย/โอน สัตว์
+        </label>
         <div className="grid grid-cols-2 gap-2">
           <div className="form-control">
             <label className="label flex cursor-pointer justify-start gap-4">
@@ -448,7 +477,9 @@ const ApprovementForm2 = ({
         </div>
       </div>
       <div className="form-group">
-        <label className="label label-text">การประเมินของเจ้าหน้าที่</label>
+        <label className="label label-text font-bold">
+          การประเมินของเจ้าหน้าที่
+        </label>
         <div className="grid grid-cols-2 gap-2">
           <div className="form-control">
             <label className="label flex cursor-pointer justify-start gap-4">
