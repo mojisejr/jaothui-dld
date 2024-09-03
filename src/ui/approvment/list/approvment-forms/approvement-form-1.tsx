@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   getProvinces,
   getAmphoeFromProvince,
@@ -11,6 +11,7 @@ import Image from "next/image";
 import { handleConfirmEdit } from "~/actions/edit-member-info";
 import { type RawRegisterData } from "@prisma/client";
 import EditButton from "./approvement-edit.button";
+import { useFormState } from "react-dom";
 
 interface ApprovementForm1Props {
   approvementInfo: RawRegisterData;
@@ -31,14 +32,24 @@ const ApprovementForm1 = ({
 
   const [edit, setEdit] = useState<boolean>(true);
   const info = approvementInfo;
-  const confirmEditWithInfo = handleConfirmEdit.bind(null, info);
+
+  const [state, formAction] = useFormState(handleConfirmEdit, { message: "" });
 
   const handleEdit = () => {
     setEdit(!edit);
   };
 
+  useEffect(() => {
+    if (state.message != "") {
+      alert(state.message);
+    }
+  }, [state]);
+
   return (
-    <form action={confirmEditWithInfo} className="grid grid-cols-1 gap-2">
+    <form
+      action={(formData) => formAction({ info, formData })}
+      className="grid grid-cols-1 gap-2"
+    >
       <div className="w-full">
         <button
           type="button"

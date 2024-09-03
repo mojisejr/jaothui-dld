@@ -7,23 +7,27 @@ import { formUpdateDataParser } from "~/lib/parser";
 import { db } from "~/server/db";
 
 export const handleConfirmEdit = async (
-  info: RawRegisterData,
-  formData: FormData,
+  prevState: { message?: string },
+  data: { info: RawRegisterData; formData: FormData },
 ) => {
+  const { info, formData } = data;
   const province = formData.get("province") == undefined ? false : true;
   const farmProvince = formData.get("farmProvince") == undefined ? false : true;
 
-  if (!province || farmProvince) throw Error("กรุณากรอกข้อมูลจังหวัดอีกครั้ง");
+  if (!province || farmProvince)
+    return {
+      message: "กรุณากรอกข้อมูลจังหวัดทั้งหมดอีกครั้ง",
+    };
 
   const parsedData = await formUpdateDataParser(formData, info);
 
-  try {
-    await db.rawRegisterData.update({
-      data: parsedData,
-      where: { userId: info.userId },
-    });
-  } catch (error) {
-    throw new Error("แก้ไขข้อมูลผิดพลาด");
+  const result = await db.rawRegisterData.update({
+    data: parsedData,
+    where: { userId: info.userId },
+  });
+
+  if (!result) {
+    return { message: "ไม่สามารถแก้ไขข้อมูลได้" };
   }
 
   revalidatePath("/", "layout");

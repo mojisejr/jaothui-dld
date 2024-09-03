@@ -1,6 +1,6 @@
 import Link from "next/link";
 import React from "react";
-import { confirmAppointmemt, getApprovementInfoOf } from "~/actions/approvment";
+import { confirmAppointmemt, getApprovementInfo } from "~/actions/approvment";
 import dayjs from "dayjs";
 import Image from "next/image";
 import SubmitAppointment from "./submit-appointment-btn";
@@ -16,7 +16,7 @@ const RequestForm = async ({ requestId, adminId, level }: RequestFormProps) => {
     null,
     requestId,
   );
-  const info = await getApprovementInfoOf(requestId);
+  const info = await getApprovementInfo(requestId);
   return (
     <form
       action={confirmAppointmentWithMetadata}

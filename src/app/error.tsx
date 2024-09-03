@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Image from "next/image";
 
 const Error = ({
@@ -9,7 +9,6 @@ const Error = ({
   error: Error & { digest?: string };
   reset: () => void;
 }) => {
-  const [message, setMessage] = useState<string>();
   useEffect(() => {
     console.log(error);
   }, [error]);
@@ -20,7 +19,7 @@ const Error = ({
         <figure className="max-w-64">
           <Image src="/images/logo.png" width={1000} height={1000} alt="logo" />
         </figure>
-        <div className="text-xl font-bold">{message}</div>
+        <div className="text-xl font-bold">เกิดข้อผิดพลาด</div>
         <div className="text-xs text-error">
           กรุณาติดต่อผู้ดูแลระบบหากพบข้อผิดพลาดที่ไม่สามารถแก้ไขได้
         </div>

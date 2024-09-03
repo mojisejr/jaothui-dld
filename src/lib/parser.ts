@@ -8,7 +8,9 @@ import {
 } from "~/actions/upload";
 import { type RawFormData } from "~/interfaces/new-member";
 
-export const formDataParser = async (formData: FormData, userId: string) => {
+export const formDataParser = async (formData: FormData) => {
+  const userId = formData.get("userId")?.toString() ?? "N/A";
+
   const idCardImageUrl = await uploadIdCardImage(
     formData.get("idCardImage") as File,
     userId,
