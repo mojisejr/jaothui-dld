@@ -12,9 +12,11 @@ export const uploadIdCardImage = async (idCard: File, userId: string) => {
       .from("dev")
       .upload(`idcard/${userId}.${extension}`, idCard);
     console.log(result);
-    if (result.error == null) {
-      return `${baseUrl}${result.data.fullPath}`;
+
+    if (result.error != null) {
+      return null;
     }
+    return `${baseUrl}${result.data.fullPath}`;
   } catch (error) {
     console.log("upload error: ", error);
   }
@@ -33,9 +35,10 @@ export const uploadFarmImage = async (
       .from("dev")
       .upload(`farm/${userId}_${index}.${extension}`, farmImage);
     console.log(result);
-    if (result.error == null) {
-      return `${baseUrl}${result.data.fullPath}`;
+    if (result.error != null) {
+      return null;
     }
+    return `${baseUrl}${result.data.fullPath}`;
   } catch (error) {
     console.log("upload error: ", error);
   }
@@ -56,9 +59,10 @@ export const updateFarmImage = async (
         upsert: true,
       });
     console.log(result);
-    if (result.error == null) {
-      return `${baseUrl}${result.data.fullPath}`;
+    if (result.error != null) {
+      return null;
     }
+    return `${baseUrl}${result.data.fullPath}`;
   } catch (error) {
     console.log("upload error: ", error);
   }
@@ -73,9 +77,10 @@ export const updateIdCardImage = async (idCard: File, userId: string) => {
       .from("dev")
       .upload(`idcard/${userId}.${extension}`, idCard, { upsert: true });
     console.log(result);
-    if (result.error == null) {
-      return `${baseUrl}${result.data.fullPath}`;
+    if (result.error != null) {
+      return null;
     }
+    return `${baseUrl}${result.data.fullPath}`;
   } catch (error) {
     console.log("upload error: ", error);
   }
@@ -95,9 +100,10 @@ export const uploadApproveImage = async (
       .from("dev")
       .upload(`${folder}/${registerId}_${adminId}.${extension}`, file);
     console.log(result);
-    if (result.error == null) {
-      return `${baseUrl}${result.data.fullPath}`;
+    if (result.error != null) {
+      return null;
     }
+    return `${baseUrl}${result.data.fullPath}`;
   } catch (error) {
     console.log("upload error: ", error);
   }

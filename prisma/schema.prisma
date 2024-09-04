@@ -68,9 +68,9 @@ model RawRegisterData {
   farmLocation      String
   idCardImage       String
   farmImage1        String
-  farmImage2        String
-  farmImage3        String
-  farmImage4        String
+  farmImage2        String?
+  farmImage3        String?
+  farmImage4        String?
   category          String
   accept            String
   user              User             @relation(fields: [userId], references: [id])
@@ -85,8 +85,8 @@ model ApprovementInfo {
   centralApproved    String?
   managementApproved String?
   grassImage1        String
-  grassImage2        String
-  grassImage3        String
+  grassImage2        String?
+  grassImage3        String?
   feedingBowl        String
   feedingBowlOther   String?
   greenhouse         String
@@ -94,14 +94,14 @@ model ApprovementInfo {
   waterBowl          String
   waterBowlOther     String?
   waterImage1        String
-  waterImage2        String
+  waterImage2        String?
   foodImage1         String
-  foodImage2         String
+  foodImage2         String?
   treatImage1        String
-  treatImage2        String
-  treatImage3        String
+  treatImage2        String?
+  treatImage3        String?
   wasteImage1        String
-  wasteImage2        String
+  wasteImage2        String?
   tag                String
   certificate        String
   product            String

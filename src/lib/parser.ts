@@ -16,26 +16,30 @@ export const formDataParser = async (formData: FormData) => {
     userId,
   );
 
+  if (idCardImageUrl == null) throw Error("upload ภาพไม่ได้");
+
   const farmImage1Url = await uploadFarmImage(
     formData.get("farmImage1") as File,
     userId,
     1,
   );
-  const farmImage2Url = await uploadFarmImage(
-    formData.get("farmImage2") as File,
-    userId,
-    2,
-  );
-  const farmImage3Url = await uploadFarmImage(
-    formData.get("farmImage3") as File,
-    userId,
-    3,
-  );
-  const farmImage4Url = await uploadFarmImage(
-    formData.get("farmImage4") as File,
-    userId,
-    4,
-  );
+
+  if (farmImage1Url == null) throw Error("upload ภาพไม่ได้");
+  // const farmImage2Url = await uploadFarmImage(
+  //   formData.get("farmImage2") as File,
+  //   userId,
+  //   2,
+  // );
+  // const farmImage3Url = await uploadFarmImage(
+  //   formData.get("farmImage3") as File,
+  //   userId,
+  //   3,
+  // );
+  // const farmImage4Url = await uploadFarmImage(
+  //   formData.get("farmImage4") as File,
+  //   userId,
+  //   4,
+  // );
   const rawFormData: RawFormData = {
     firstname: formData.get("firstName")?.toString() ?? "N/A",
     lastname: formData.get("lastName")?.toString() ?? "N/A",
@@ -83,9 +87,9 @@ export const formDataParser = async (formData: FormData) => {
     farmLocation: formData.get("farmLocation")?.toString() ?? "N/A",
     idCardImage: idCardImageUrl ?? "N/A",
     farmImage1: farmImage1Url ?? "N/A",
-    farmImage2: farmImage2Url ?? "N/A",
-    farmImage3: farmImage3Url ?? "N/A",
-    farmImage4: farmImage4Url ?? "N/A",
+    // farmImage2: farmImage2Url ?? "N/A",
+    // farmImage3: farmImage3Url ?? "N/A",
+    // farmImage4: farmImage4Url ?? "N/A",
     category: formData.get("radioCategory")?.toString() ?? "N/A",
     accept: formData.get("radioAccept")?.toString() ?? "N/A",
     userId,
@@ -109,23 +113,23 @@ export const formUpdateDataParser = async (
       ? info.farmImage1
       : await updateFarmImage(farmImage1, info.userId, 1);
 
-  const farmImage2 = formData.get("farmImage2") as File;
-  const farmImage2Url =
-    farmImage2.name == undefined || farmImage2.size <= 0
-      ? info.farmImage2
-      : await updateFarmImage(farmImage2, info.userId, 2);
+  // const farmImage2 = formData.get("farmImage2") as File;
+  // const farmImage2Url =
+  //   farmImage2.name == undefined || farmImage2.size <= 0
+  //     ? info.farmImage2
+  //     : await updateFarmImage(farmImage2, info.userId, 2);
 
-  const farmImage3 = formData.get("farmImage3") as File;
-  const farmImage3Url =
-    farmImage3.name == undefined || farmImage3.size <= 0
-      ? info.farmImage3
-      : await updateFarmImage(farmImage3, info.userId, 3);
+  // const farmImage3 = formData.get("farmImage3") as File;
+  // const farmImage3Url =
+  //   farmImage3.name == undefined || farmImage3.size <= 0
+  //     ? info.farmImage3
+  //     : await updateFarmImage(farmImage3, info.userId, 3);
 
-  const farmImage4 = formData.get("farmImage4") as File;
-  const farmImage4Url =
-    farmImage4.name == undefined || farmImage4.size <= 0
-      ? info.farmImage4
-      : await updateFarmImage(farmImage4, info.userId, 4);
+  // const farmImage4 = formData.get("farmImage4") as File;
+  // const farmImage4Url =
+  //   farmImage4.name == undefined || farmImage4.size <= 0
+  //     ? info.farmImage4
+  //     : await updateFarmImage(farmImage4, info.userId, 4);
 
   const rawFormData = {
     firstname: formData.get("firstName")?.toString() ?? "N/A",
@@ -174,9 +178,9 @@ export const formUpdateDataParser = async (
     farmLocation: formData.get("farmLocation")?.toString() ?? "N/A",
     idCardImage: idCardImageUrl ?? "N/A",
     farmImage1: farmImage1Url ?? "N/A",
-    farmImage2: farmImage2Url ?? "N/A",
-    farmImage3: farmImage3Url ?? "N/A",
-    farmImage4: farmImage4Url ?? "N/A",
+    // farmImage2: farmImage2Url ?? "N/A",
+    // farmImage3: farmImage3Url ?? "N/A",
+    // farmImage4: farmImage4Url ?? "N/A",
     category: formData.get("radioCategory")?.toString() ?? "N/A",
     accept: formData.get("radioAccept")?.toString() ?? "N/A",
   };
@@ -196,19 +200,21 @@ export const memberApprovementParser = async (
     "grass",
   );
 
-  const grassImage2 = await uploadApproveImage(
-    formData.get("grassImage2") as File,
-    registerId,
-    adminId,
-    "grass",
-  );
+  if (grassImage1 == null) throw Error("uplaod grass ไม่ได้");
 
-  const grassImage3 = await uploadApproveImage(
-    formData.get("grassImage3") as File,
-    registerId,
-    adminId,
-    "grass",
-  );
+  // const grassImage2 = await uploadApproveImage(
+  //   formData.get("grassImage2") as File,
+  //   registerId,
+  //   adminId,
+  //   "grass",
+  // );
+
+  // const grassImage3 = await uploadApproveImage(
+  //   formData.get("grassImage3") as File,
+  //   registerId,
+  //   adminId,
+  //   "grass",
+  // );
 
   const waterImage1 = await uploadApproveImage(
     formData.get("waterImage1") as File,
@@ -217,12 +223,14 @@ export const memberApprovementParser = async (
     "water",
   );
 
-  const waterImage2 = await uploadApproveImage(
-    formData.get("waterImage2") as File,
-    registerId,
-    adminId,
-    "water",
-  );
+  if (waterImage1 == null) throw Error("upload water ไม่ได้");
+
+  // const waterImage2 = await uploadApproveImage(
+  //   formData.get("waterImage2") as File,
+  //   registerId,
+  //   adminId,
+  //   "water",
+  // );
 
   const foodImage1 = await uploadApproveImage(
     formData.get("foodImage1") as File,
@@ -231,12 +239,14 @@ export const memberApprovementParser = async (
     "food",
   );
 
-  const foodImage2 = await uploadApproveImage(
-    formData.get("foodImage2") as File,
-    registerId,
-    adminId,
-    "food",
-  );
+  if (foodImage1 == null) throw Error("upload food ไม่ได้");
+
+  // const foodImage2 = await uploadApproveImage(
+  //   formData.get("foodImage2") as File,
+  //   registerId,
+  //   adminId,
+  //   "food",
+  // );
 
   const treatImage1 = await uploadApproveImage(
     formData.get("treatImage1") as File,
@@ -245,19 +255,21 @@ export const memberApprovementParser = async (
     "treat",
   );
 
-  const treatImage2 = await uploadApproveImage(
-    formData.get("treatImage2") as File,
-    registerId,
-    adminId,
-    "treat",
-  );
+  if (treatImage1 == null) throw Error("upload treat ไม่ได้");
 
-  const treatImage3 = await uploadApproveImage(
-    formData.get("treatImage3") as File,
-    registerId,
-    adminId,
-    "treat",
-  );
+  // const treatImage2 = await uploadApproveImage(
+  //   formData.get("treatImage2") as File,
+  //   registerId,
+  //   adminId,
+  //   "treat",
+  // );
+
+  // const treatImage3 = await uploadApproveImage(
+  //   formData.get("treatImage3") as File,
+  //   registerId,
+  //   adminId,
+  //   "treat",
+  // );
 
   const wasteImage1 = await uploadApproveImage(
     formData.get("wasteImage1") as File,
@@ -266,17 +278,19 @@ export const memberApprovementParser = async (
     "waste",
   );
 
-  const wasteImage2 = await uploadApproveImage(
-    formData.get("wasteImage2") as File,
-    registerId,
-    adminId,
-    "waste",
-  );
+  if (wasteImage1 == null) throw Error("upload waste ไม่ได้");
+
+  // const wasteImage2 = await uploadApproveImage(
+  //   formData.get("wasteImage2") as File,
+  //   registerId,
+  //   adminId,
+  //   "waste",
+  // );
 
   const parsedData = {
     grassImage1: grassImage1 ?? "N/A",
-    grassImage2: grassImage2 ?? "N/A",
-    grassImage3: grassImage3 ?? "N/A",
+    // grassImage2: grassImage2 ?? "N/A",
+    // grassImage3: grassImage3 ?? "N/A",
     feedingBowl: formData.get("feedingBowl") as string,
     feedingBowlOther: formData.get("feedingBowlOther") as string,
     greenhouse: formData.get("greenhouse") as string,
@@ -284,14 +298,14 @@ export const memberApprovementParser = async (
     waterBowl: formData.get("waterBowl") as string,
     waterBowlOther: formData.get("waterBowlOther") as string,
     waterImage1: waterImage1 ?? "N/A",
-    waterImage2: waterImage2 ?? "N/A",
+    // waterImage2: waterImage2 ?? "N/A",
     foodImage1: foodImage1 ?? "N/A",
-    foodImage2: foodImage2 ?? "N/A",
+    // foodImage2: foodImage2 ?? "N/A",
     treatImage1: treatImage1 ?? "N/A",
-    treatImage2: treatImage2 ?? "N/A",
-    treatImage3: treatImage3 ?? "N/A",
+    // treatImage2: treatImage2 ?? "N/A",
+    // treatImage3: treatImage3 ?? "N/A",
     wasteImage1: wasteImage1 ?? "N/A",
-    wasteImage2: wasteImage2 ?? "N/A",
+    // wasteImage2: wasteImage2 ?? "N/A",
     tag: formData.get("tag") as string,
     certificate: formData.get("certificate") as string,
     product: formData.get("product") as string,

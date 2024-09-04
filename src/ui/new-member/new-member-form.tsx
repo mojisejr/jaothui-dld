@@ -689,7 +689,8 @@ const NewMemberForm = ({ userId }: NewMemberFormProps) => {
         />
       </div>
       <div className="form-group">
-        <label className="label label-text">ภาพถ่ายฟาร์ม 4 ภาพ</label>
+        {/* <label className="label label-text">ภาพถ่ายฟาร์ม 4 ภาพ</label> */}
+        <label className="label label-text">ภาพถ่ายฟาร์ม</label>
         <div className="grid grid-cols-1 gap-2">
           <div className="form-control">
             <input
@@ -700,7 +701,7 @@ const NewMemberForm = ({ userId }: NewMemberFormProps) => {
               required
             />
           </div>
-          <div className="form-control">
+          {/* <div className="form-control">
             <input
               type="file"
               name="farmImage2"
@@ -708,8 +709,8 @@ const NewMemberForm = ({ userId }: NewMemberFormProps) => {
               className="file-input file-input-bordered file-input-sm"
               required
             />
-          </div>
-          <div className="form-control">
+          </div> */}
+          {/* <div className="form-control">
             <input
               type="file"
               name="farmImage3"
@@ -717,8 +718,8 @@ const NewMemberForm = ({ userId }: NewMemberFormProps) => {
               className="file-input file-input-bordered file-input-sm"
               required
             />
-          </div>
-          <div className="form-control">
+          </div> */}
+          {/* <div className="form-control">
             <input
               type="file"
               name="farmImage4"
@@ -726,7 +727,7 @@ const NewMemberForm = ({ userId }: NewMemberFormProps) => {
               className="file-input file-input-bordered file-input-sm"
               required
             />
-          </div>
+          </div> */}
         </div>
       </div>
       <div className="form-group">

@@ -674,7 +674,8 @@ const RequestForm = async ({ requestId, adminId, level }: RequestFormProps) => {
         </figure>
       </div>
       <div className="form-group">
-        <label className="label label-text">ภาพถ่ายฟาร์ม 4 ภาพ</label>
+        {/* <label className="label label-text">ภาพถ่ายฟาร์ม 4 ภาพ</label> */}
+        <label className="label label-text">ภาพถ่ายฟาร์ม</label>
         <div className="grid grid-cols-1 gap-2">
           <div className="form-control">
             <figure className="flex w-full justify-center">
@@ -687,7 +688,7 @@ const RequestForm = async ({ requestId, adminId, level }: RequestFormProps) => {
               />
             </figure>
           </div>
-          <div className="form-control">
+          {/* <div className="form-control">
             <figure className="flex w-full justify-center">
               <Image
                 className="max-w-64 rounded-xl"
@@ -697,8 +698,8 @@ const RequestForm = async ({ requestId, adminId, level }: RequestFormProps) => {
                 alt="id-card-image"
               />
             </figure>
-          </div>
-          <div className="form-control">
+          </div> */}
+          {/* <div className="form-control">
             <figure className="flex w-full justify-center">
               <Image
                 className="max-w-64 rounded-xl"
@@ -708,8 +709,8 @@ const RequestForm = async ({ requestId, adminId, level }: RequestFormProps) => {
                 alt="id-card-image"
               />
             </figure>
-          </div>
-          <div className="form-control">
+          </div> */}
+          {/* <div className="form-control">
             <figure className="flex w-full justify-center">
               <Image
                 className="max-w-64 rounded-xl"
@@ -719,7 +720,7 @@ const RequestForm = async ({ requestId, adminId, level }: RequestFormProps) => {
                 alt="id-card-image"
               />
             </figure>
-          </div>
+          </div> */}
         </div>
       </div>
       <div className="form-group">

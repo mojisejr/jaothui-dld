@@ -8,7 +8,7 @@ const ApprovmentSubmitButton = () => {
     <button
       disabled={pending}
       type="submit"
-      className="btn btn-secondary min-w-[200px] rounded-full"
+      className="btn btn-secondary min-w-[100px] rounded-full"
     >
       {pending ? (
         <div className="flex items-center">

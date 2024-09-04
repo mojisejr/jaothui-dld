@@ -1238,7 +1238,7 @@ const ApprovementForm1 = ({
         <figure className="flex w-full justify-center">
           <Image
             className="max-w-64 rounded-xl"
-            src={info?.idCardImage}
+            src={info?.idCardImage ?? "/images/logo.png"}
             width={1000}
             height={760}
             alt="id-card-image"
@@ -1254,13 +1254,14 @@ const ApprovementForm1 = ({
         )}
       </div>
       <div className="form-group">
-        <label className="label label-text">ภาพถ่ายฟาร์ม 4 ภาพ</label>
+        {/* <label className="label label-text">ภาพถ่ายฟาร์ม 4 ภาพ</label> */}
+        <label className="label label-text">ภาพถ่ายฟาร์ม</label>
         <div className="grid grid-cols-1 gap-2">
           <div className="form-control">
             <figure className="flex w-full justify-center">
               <Image
                 className="max-w-64 rounded-xl"
-                src={info?.farmImage1}
+                src={info?.farmImage1 ?? "/images/logo.png"}
                 width={1000}
                 height={760}
                 alt="id-card-image"
@@ -1275,7 +1276,7 @@ const ApprovementForm1 = ({
               />
             )}
           </div>
-          <div className="form-control">
+          {/* <div className="form-control">
             <figure className="flex w-full justify-center">
               <Image
                 className="max-w-64 rounded-xl"
@@ -1293,8 +1294,8 @@ const ApprovementForm1 = ({
                 className="file-input file-input-bordered file-input-sm mt-2"
               />
             )}
-          </div>
-          <div className="form-control">
+          </div> */}
+          {/* <div className="form-control">
             <figure className="flex w-full justify-center">
               <Image
                 className="max-w-64 rounded-xl"
@@ -1312,8 +1313,8 @@ const ApprovementForm1 = ({
                 className="file-input file-input-bordered file-input-sm mt-2"
               />
             )}
-          </div>
-          <div className="form-control">
+          </div> */}
+          {/* <div className="form-control">
             <figure className="flex w-full justify-center">
               <Image
                 className="max-w-64 rounded-xl"
@@ -1331,7 +1332,7 @@ const ApprovementForm1 = ({
                 className="file-input file-input-bordered file-input-sm mt-2"
               />
             )}
-          </div>
+          </div> */}
         </div>
       </div>
       <div className="form-group">
