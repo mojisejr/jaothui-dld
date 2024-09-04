@@ -701,7 +701,7 @@ const ApprovementFinalForm = ({
         <figure className="flex w-full justify-center">
           <Image
             className="max-w-64 rounded-xl"
-            src={info?.idCardImage}
+            src={info?.idCardImage ?? "/images/logo.png"}
             width={1000}
             height={760}
             alt="id-card-image"
@@ -715,14 +715,14 @@ const ApprovementFinalForm = ({
             <figure className="flex w-full justify-center">
               <Image
                 className="max-w-64 rounded-xl"
-                src={info?.farmImage1}
+                src={info?.farmImage1 ?? "/images/logo.png"}
                 width={1000}
                 height={760}
                 alt="id-card-image"
               />
             </figure>
           </div>
-          <div className="form-control">
+          {/* <div className="form-control">
             <figure className="flex w-full justify-center">
               <Image
                 className="max-w-64 rounded-xl"
@@ -732,8 +732,8 @@ const ApprovementFinalForm = ({
                 alt="id-card-image"
               />
             </figure>
-          </div>
-          <div className="form-control">
+          </div> */}
+          {/* <div className="form-control">
             <figure className="flex w-full justify-center">
               <Image
                 className="max-w-64 rounded-xl"
@@ -743,8 +743,8 @@ const ApprovementFinalForm = ({
                 alt="id-card-image"
               />
             </figure>
-          </div>
-          <div className="form-control">
+          </div> */}
+          {/* <div className="form-control">
             <figure className="flex w-full justify-center">
               <Image
                 className="max-w-64 rounded-xl"
@@ -754,7 +754,7 @@ const ApprovementFinalForm = ({
                 alt="id-card-image"
               />
             </figure>
-          </div>
+          </div> */}
         </div>
       </div>
       <div className="form-group">
@@ -885,7 +885,7 @@ const ApprovementFinalForm = ({
         )}
         <Link
           href="/approvement/list"
-          className="btn btn-neutral min-w-[200px] rounded-full"
+          className="btn btn-neutral min-w-[100px] rounded-full"
         >
           กลับ
         </Link>

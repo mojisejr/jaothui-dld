@@ -44,9 +44,9 @@ export interface RawFormData {
   farmLocation: string;
   idCardImage: string;
   farmImage1: string;
-  farmImage2: string;
-  farmImage3: string;
-  farmImage4: string;
+  farmImage2?: string;
+  farmImage3?: string;
+  farmImage4?: string;
   category: string;
   accept: string;
   userId: string;

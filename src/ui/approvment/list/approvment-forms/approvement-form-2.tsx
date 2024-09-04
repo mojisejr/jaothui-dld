@@ -50,7 +50,7 @@ const ApprovementForm2 = ({
               required
             />
           </div>
-          <div className="form-control">
+          {/* <div className="form-control">
             <input
               type="file"
               name="grassImage2"
@@ -58,8 +58,8 @@ const ApprovementForm2 = ({
               className="file-input file-input-bordered file-input-sm"
               required
             />
-          </div>
-          <div className="form-control">
+          </div> */}
+          {/* <div className="form-control">
             <input
               type="file"
               name="grassImage3"
@@ -67,7 +67,7 @@ const ApprovementForm2 = ({
               className="file-input file-input-bordered file-input-sm"
               required
             />
-          </div>
+          </div> */}
         </div>
       </div>
       <div className="form-group">
@@ -197,7 +197,7 @@ const ApprovementForm2 = ({
               required
             />
           </div>
-          <div className="form-control">
+          {/* <div className="form-control">
             <input
               type="file"
               name="waterImage2"
@@ -205,7 +205,7 @@ const ApprovementForm2 = ({
               className="file-input file-input-bordered file-input-sm"
               required
             />
-          </div>
+          </div> */}
         </div>
       </div>
       <div className="form-group">
@@ -222,7 +222,7 @@ const ApprovementForm2 = ({
               required
             />
           </div>
-          <div className="form-control">
+          {/* <div className="form-control">
             <input
               type="file"
               name="foodImage2"
@@ -230,7 +230,7 @@ const ApprovementForm2 = ({
               className="file-input file-input-bordered file-input-sm"
               required
             />
-          </div>
+          </div> */}
         </div>
       </div>
       <div className="form-group">
@@ -245,7 +245,7 @@ const ApprovementForm2 = ({
               required
             />
           </div>
-          <div className="form-control">
+          {/* <div className="form-control">
             <input
               type="file"
               name="treatImage2"
@@ -253,8 +253,8 @@ const ApprovementForm2 = ({
               className="file-input file-input-bordered file-input-sm"
               required
             />
-          </div>
-          <div className="form-control">
+          </div> */}
+          {/* <div className="form-control">
             <input
               type="file"
               name="treatImage3"
@@ -262,7 +262,7 @@ const ApprovementForm2 = ({
               className="file-input file-input-bordered file-input-sm"
               required
             />
-          </div>
+          </div> */}
         </div>
       </div>
       <div className="form-group">
@@ -279,7 +279,7 @@ const ApprovementForm2 = ({
               required
             />
           </div>
-          <div className="form-control">
+          {/* <div className="form-control">
             <input
               type="file"
               name="wasteImage2"
@@ -287,7 +287,7 @@ const ApprovementForm2 = ({
               className="file-input file-input-bordered file-input-sm"
               required
             />
-          </div>
+          </div> */}
         </div>
       </div>
       <div className="form-group">
