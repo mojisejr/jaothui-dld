@@ -14,7 +14,7 @@ export const handleConfirmEdit = async (
   const province = formData.get("province") == undefined ? false : true;
   const farmProvince = formData.get("farmProvince") == undefined ? false : true;
 
-  if (!province || farmProvince)
+  if (!province || !farmProvince)
     return {
       message: "กรุณากรอกข้อมูลจังหวัดทั้งหมดอีกครั้ง",
     };
