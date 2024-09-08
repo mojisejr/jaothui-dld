@@ -101,7 +101,7 @@ export const getRequestCount = async (level: string, province: string) => {
     });
 
     const filtered = found.filter(
-      (f) => f.MemberApprovement?.centralApproved == null,
+      (f) => f.MemberApprovement?.managementApproved == null,
     );
 
     return filtered.length;
@@ -111,7 +111,7 @@ export const getRequestCount = async (level: string, province: string) => {
     });
 
     const filtered = found.filter(
-      (f) => f.MemberApprovement?.centralApproved == null,
+      (f) => f.MemberApprovement?.managementApproved == null,
     );
 
     return filtered.length;
