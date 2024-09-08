@@ -19,5 +19,5 @@ export const createNewMemberInfo = async (
   }
 
   revalidatePath("/", "layout");
-  redirect("/new-member-success");
+  redirect(`/new-member-success?name=${result.firstname}`);
 };
